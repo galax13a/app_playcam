@@ -1,19 +1,23 @@
-// app.js
+ // app.js
 const { app, ipcMain } = require('electron');
 const express = require('express');
 const path = require('path');
 const routes = require('./routes');
 const { createMainWindow } = require('./windows'); // Importa el nuevo módulo
 
-const reload = require('electron-reload');
-const projectDir = path.join(__dirname, '..'); // reload electron
-reload(projectDir, {
-  electron: path.join(projectDir, 'node_modules', '.bin', 'electron'),
-  awaitWriteFinish: true,
-});
-
+let Reload =  true;
 let expressApp;
 let devtools = true; //open toolsDev
+let MainWinApp;
+
+if(Reload){
+  const reload = require('electron-reload');
+  const projectDir = path.join(__dirname, '..'); // reload electron
+  reload(projectDir, {
+    electron: path.join(projectDir, 'node_modules', '.bin', 'electron'),
+    awaitWriteFinish: true,
+  });
+}
 
 async function startExpress() {
   expressApp = express();
@@ -38,7 +42,8 @@ async function startExpress() {
 
 app.whenReady().then(async () => {
   const expressApp = await startExpress();
-  createMainWindow({ width: 1200, height: 800, devtools: true }, expressApp);
+  MainWinApp = createMainWindow({ width: 1200, height: 800, devtools: devtools }, expressApp);
+
 });
 
 app.on('window-all-closed', function () {

@@ -1,14 +1,22 @@
 const { ipcRenderer, remote } = require('electron');
-console.log('Running  preload')
+console.log('Running  preload v1')
 //alert('Starting')
 
 window.addEventListener('DOMContentLoaded', () => {
-/*
+    /*
     const openPuppeteerButton = document.getElementById('btn-open-puppeteer');
     openPuppeteerButton.addEventListener('click', () => {
       window.openPuppeteerWindow();
     });
     */
+    const updateOnlineStatus = () => {
+      document.getElementById('status').innerHTML = navigator.onLine ? 'online' : 'offline'
+    }
+    
+    window.addEventListener('online', updateOnlineStatus)
+    window.addEventListener('offline', updateOnlineStatus)
+    
+    updateOnlineStatus();
 
     const btn_close = document.getElementById('win-close');
     btn_close.addEventListener('click', () => {
@@ -21,7 +29,6 @@ window.addEventListener('DOMContentLoaded', () => {
         ipcRenderer.send('minimize-win-main');
 
     });
-
 
     // Maximizar la ventana principal
     const btn_maximize = document.querySelector("#win-maximize")

@@ -66,6 +66,10 @@ function createMainWindow(config = {}, expressApp) {
     console.log('cerrando close');
     mainWindow.close();
   });
+
+  mainWindow.hide();
+  mainWindow.maximize();
+  mainWindow.show();
 }
 
 module.exports = {
