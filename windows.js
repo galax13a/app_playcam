@@ -10,7 +10,7 @@ function createMainWindow(config = {}, expressApp) {
     const {
       devtools = false,
       preload = 'preload-app.js',
-      icon = '../src/icons/icon2.png',
+      icon = 'public/images/logo2.png',//icon = '../src/icons/icon2.png',
       width = 800,
       height = 600,
     } = config;

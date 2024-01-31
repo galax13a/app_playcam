@@ -30,7 +30,7 @@
     z-index: 999;
     margin: 0;
     color: white;
-    margin-top: -22px;
+    margin-top: -18px;
     margin-left: 30px;
     font-size: larger;
   }
@@ -41,11 +41,15 @@
     top: 0;
     left: 0;
     width: 100%;
-    height: 32px;
+    height: 36px;
     background: rgb(54,0,42);
     background: linear-gradient(171deg, rgba(39, 3, 39, 0.822) 0%, rgb(73, 12, 126) 100%);
-
     -webkit-app-region: drag;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2px;
+    border-bottom: 2px solid #940de294;
+    border-bottom-right-radius: 16px;
+    /*border-bottom-left-radius: 16px;*/
   }
   
   /* Estilo del botón de cerrar */
@@ -106,6 +110,111 @@
   body{
     background-color: black;
   }
+
+  /* style.css */
+
+/* Clases de Margen (m) */
+.m-0 {
+    margin: 0 !important;
+}
+
+.m-1 {
+    margin: 0.25rem !important;
+}
+
+.m-2 {
+    margin: 0.5rem !important;
+}
+
+.m-3 {
+    margin: 1rem !important;
+}
+
+.m-4 {
+    margin: 1.5rem !important;
+}
+
+.m-5 {
+    margin: 3rem !important;
+}
+
+/* Clases de Margen Superior (mt) */
+.mt-0 {
+    margin-top: 0 !important;
+}
+
+.mt-1 {
+    margin-top: 0.25rem !important;
+}
+
+.mt-2 {
+    margin-top: 0.5rem !important;
+}
+
+.mt-3 {
+    margin-top: 1rem !important;
+}
+
+.mt-4 {
+    margin-top: 1.5rem !important;
+}
+
+/* Clases de Margen Inferior (mb) */
+.mb-0 {
+    margin-bottom: 0 !important;
+}
+
+.mb-1 {
+    margin-bottom: 0.25rem !important;
+}
+
+.mb-2 {
+    margin-bottom: 0.5rem !important;
+}
+
+.mb-3 {
+    margin-bottom: 1rem !important;
+}
+
+.mb-4 {
+    margin-bottom: 1.5rem !important;
+}
+
+/* Clases de Relleno (p) */
+.p-0 {
+    padding: 0 !important;
+}
+
+.p-1 {
+    padding: 0.25rem !important;
+}
+
+.p-2 {
+    padding: 0.5rem !important;
+}
+
+.p-3 {
+    padding: 1rem !important;
+}
+
+.p-4 {
+    padding: 1.5rem !important;
+}
+
+.p-5 {
+    padding: 3rem !important;
+}
+.fs-1 {
+    font-size: 1.60rem !important;
+}
+
+.fs-2 {
+    font-size: 1.5rem !important;
+}
+
+.fs-3 {
+    font-size: 2rem !important;
+}
 
   .child-window-show {
     animation-name: slide-in;
@@ -231,6 +340,9 @@ b{
 
 .danger{
     color: var(--color-danger);
+}
+.logis {
+    color:#ff951c;
 }
 
 .success{

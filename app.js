@@ -1,9 +1,10 @@
  // app.js
-const { app, ipcMain } = require('electron');
+const { app, ipcMain, Notification  } = require('electron');
 const express = require('express');
 const path = require('path');
 const routes = require('./routes');
 const { createMainWindow } = require('./windows'); // Importa el nuevo módulo
+const ejs = require('ejs');
 
 let Reload =  true;
 let expressApp;
@@ -26,7 +27,8 @@ async function startExpress() {
   expressApp.set('view engine', 'ejs');
   expressApp.set('views', path.join(__dirname, 'views'));
   expressApp.use(express.static(path.join(__dirname, 'public')));
-  
+  expressApp.use('/modules', express.static(path.join(__dirname, '../node_modules')));
+
   expressApp.use(routes);
 
   const PORT = process.env.PORT || 3069;
