@@ -72,6 +72,41 @@ function createMainWindow(config = {}, expressApp) {
   mainWindow.show();
 }
 
+async function createWin(config) {
+  const { url, icon, devtools, preloader } = config;
+
+  const win = new BrowserWindow({
+    width: 700,
+    height: 500,
+    title: 'Traductor',
+    resizable: true,
+    movable: false,
+    minimizable: true,
+    maximizable: true,
+    fullscreenable: false,
+    webPreferences: {
+      nodeIntegration: false,
+      contextIsolation: true,
+      preload: path.join(__dirname, preloader),
+    },
+    icon: path.join(__dirname, icon),
+    frame: true, // Oculta la barra de título
+    autoHideMenuBar: true, // Oculta la barra de menú
+  });
+
+  await win.loadURL(url);
+
+  if (devtools) {
+    win.webContents.openDevTools();
+  }
+
+  win.on('closed', () => {
+   // win = null;
+  });
+
+}
+
 module.exports = {
   createMainWindow,
+  createWin,
 };

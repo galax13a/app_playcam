@@ -1,5 +1,5 @@
 const { ipcRenderer, remote } = require('electron');
-console.log('Running  preload v1')
+console.log('Running App  preload v1')
 //alert('Starting')
 
 window.addEventListener('DOMContentLoaded', () => {
@@ -36,6 +36,19 @@ window.addEventListener('DOMContentLoaded', () => {
         ipcRenderer.send('maximize-win-main');
 
     });
+
+    document.getElementById('traductor-link').addEventListener('click', function (event) {
+         //event.preventDefault();      
+      ipcRenderer.send('open-traductor-window');
+  });
+
+  
+  /*
+  var elementoAocultar = document.querySelector("#gb");
+  if (elementoAocultar) {
+    elementoAocultar.style.display = 'none';
+  }
+  */
 
 // abrirventanas win children
 /*

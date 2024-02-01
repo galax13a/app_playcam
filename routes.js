@@ -58,6 +58,10 @@ router.get('/app/favorites', (req, res) => {
   res.render('favorites/favorites', { message: 'Hola desde Favorites!' });
 });
 
+router.get('/app/traductor', (req, res) => {  
+  res.render('traductor/traductor', { message: 'Hola desde Traductor!' });
+});
+
 router.get('/app/lougee', (req, res) => {  
   res.render('lougee/lougee', { message: 'Hola desde Lougee!' });
 });
