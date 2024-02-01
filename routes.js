@@ -7,6 +7,7 @@ const router = express.Router();
 router.get('/', (req, res) => {
   const nomeSite = process.env.nome_site;
   res.render('index', { nomeSite });
+  
   console.log(' express render index');
 });
 
