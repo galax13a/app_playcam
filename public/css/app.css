@@ -1,4 +1,5 @@
 /* ===== Scrollbar CSS ===== */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
   /* Firefox */
   * {
     scrollbar-width: auto;
@@ -25,12 +26,11 @@
     margin: 0 4px;
     margin-top: 10px;
   }
-
   .app-name {    
     z-index: 999;
     margin: 0;
     color: white;
-    margin-top: -18px;
+    margin-top: -20px;
     margin-left: 30px;
     font-size: larger;
   }
@@ -43,13 +43,15 @@
     width: 100%;
     height: 36px;
     background: rgb(54,0,42);
-    background: linear-gradient(171deg, rgba(39, 3, 39, 0.822) 0%, rgb(73, 12, 126) 100%);
+    background: linear-gradient(171deg, rgba(202, 4, 202, 0.548) 0%, rgb(35, 243, 198) 100%);
     -webkit-app-region: drag;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     margin-bottom: 2px;
-    border-bottom: 2px solid #940de294;
+    border-bottom: 2px solid #24053694;
     border-bottom-right-radius: 16px;
-    /*border-bottom-left-radius: 16px;*/
+    border-bottom-left-radius: 6px;
+    border-top-left-radius: 6px;
+    z-index: 9999;
   }
   
   /* Estilo del botón de cerrar */
@@ -138,7 +140,6 @@
     margin: 3rem !important;
 }
 
-/* Clases de Margen Superior (mt) */
 .mt-0 {
     margin-top: 0 !important;
 }
@@ -159,7 +160,6 @@
     margin-top: 1.5rem !important;
 }
 
-/* Clases de Margen Inferior (mb) */
 .mb-0 {
     margin-bottom: 0 !important;
 }
@@ -215,7 +215,15 @@
 .fs-3 {
     font-size: 2rem !important;
 }
-
+.fs-4 {
+    font-size: 3rem !important;
+}
+.fs-5 {
+    font-size: 4rem !important;
+}
+.fs-6 {
+    font-size: 5rem !important;
+}
   .child-window-show {
     animation-name: slide-in;
     animation-duration: 0.3s;
@@ -231,8 +239,6 @@
     }
   } 
 
-  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
-
 :root{
     --color-primary: #6C9BCF;
     --color-danger: #FF0060;
@@ -244,14 +250,11 @@
     --color-light: rgba(132, 139, 200, 0.18);
     --color-dark-variant: #677483;
     --color-background: #f6f6f9;
-
     --card-border-radius: 2rem;
     --border-radius-1: 0.4rem;
     --border-radius-2: 1.2rem;
-
     --card-padding: 1.8rem;
     --padding-1: 1.2rem;
-
     --box-shadow: 0 2rem 3rem var(--color-light);
 }
 
@@ -342,7 +345,7 @@ b{
     color: var(--color-danger);
 }
 .logis {
-    color:#ff951c;
+    color:#1cffd9;
 }
 
 .success{
@@ -368,7 +371,7 @@ aside{
 aside .toggle{
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     margin-top: 1.4rem;
 }
 
@@ -407,8 +410,8 @@ aside .sidebar a{
     display: flex;
     align-items: center;
     color: var(--color-info-dark);
-    height: 3.7rem;
-    gap: 1rem;
+    height: 3.0rem;
+    gap: 1.3rem;
     position: relative;
     margin-left: 2rem;
     transition: all 0.3s ease;
@@ -775,9 +778,20 @@ main .recent-orders a{
     gap: 0.6rem;
 }
 
+#toggleMenu.toggle-menu-opened  #menuToglePlay  {
+    display: block;
+}
+
+#toggleMenu.toggle-menu-closed  #menuToglePlay {
+    display: none;
+}
+#toggleMenu{
+    cursor: pointer;
+}
+
 @media screen and (max-width: 1200px) {
     .container{
-        width: 95%;
+        width: 96%;
         grid-template-columns: 7rem auto 23rem;
     }
 
@@ -823,10 +837,12 @@ main .recent-orders a{
     main table thead tr th:first-child{
         display: none;
     }
-
     main table tbody tr td:last-child,
     main table tbody tr td:first-child{
         display: none;
+    }
+    aside .sidebar a{
+        margin-left: 2.5rem;
     }
 
 }
@@ -836,6 +852,9 @@ main .recent-orders a{
         width: 100%;
         grid-template-columns: 1fr;
         padding: 0 var(--padding-1);
+    }
+    .title-bar{
+        display: none;
     }
 
     aside{
@@ -945,4 +964,5 @@ main .recent-orders a{
         font-size: 2rem;
     }
 
+    
 }

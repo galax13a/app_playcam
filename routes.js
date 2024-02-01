@@ -10,15 +10,15 @@ router.get('/', (req, res) => {
   console.log(' express render index');
 });
 
-/*
-router.get('/', (req, res) => {
-    res.send('Master Playcams'); 
-  });
-  */
-
 router.get('/login', (req, res) => {
   const nomeSite = process.env.nome_site;
   res.render('login', { nomeSite });
 });
+
+router.get('/app/moderator', (req, res) => {
+  console.log(' moderator render');
+  res.render('moderator/moderator');
+});
+
 
 module.exports = router;

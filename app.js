@@ -5,6 +5,7 @@ const path = require('path');
 const routes = require('./routes');
 const { createMainWindow } = require('./windows'); // Importa el nuevo módulo
 const ejs = require('ejs');
+const htmx = require('htmx');
 
 let Reload =  true;
 let expressApp;
@@ -25,6 +26,7 @@ async function startExpress() {
 
   expressApp.use(express.json());
   expressApp.set('view engine', 'ejs');
+  //expressApp.use(htmx);
   expressApp.set('views', path.join(__dirname, 'views'));
   expressApp.use(express.static(path.join(__dirname, 'public')));
   expressApp.use('/modules', express.static(path.join(__dirname, '../node_modules')));
