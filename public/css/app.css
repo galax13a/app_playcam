@@ -966,3 +966,77 @@ main .recent-orders a{
 
     
 }
+
+.moderator-container {
+    max-width: 760px;
+    margin: 50px auto;
+    padding: 20px;
+  
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    color: var(--color-dark);
+}
+
+.moderator-info {
+    margin-bottom: 20px;
+}
+
+.action-buttons {
+    display: flex;
+    justify-content: space-around;
+}
+
+/* Estilos específicos para los botones */
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.recommend-button {
+    background-color: #e74c3c; /* Rojo para el botón de recomendar */
+    color: #fff;
+}
+
+.pm-button {
+    background-color: #3498db; /* Azul para el botón de enviar PM */
+    color: #fff;
+}
+
+/* Estilo degradado para Moderar Modelo */
+.moderate-model-button {
+    background: linear-gradient(to right, #3498db, #e74c3c);
+    color: #fff;
+}
+
+.button-pink {
+    background: linear-gradient(to right, #3498db, #e74c3c);
+    color: #fff;
+}
+
+/* Estilo degradado para Exhibitionist Cams */
+.exhibitionist-cams-button {
+    background: linear-gradient(to right, #2ecc71, #e67e22);
+    color: #fff;
+}
+
+/* Estilo de sombra al hacer hover */
+.moderate-model-button:hover,
+.exhibitionist-cams-button:hover {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
+}
+
+/* Añade estos estilos en tu archivo win11dark.css */
+
+.button-group {
+    display: flex;
+    gap: 10px; /* Espacio entre botones */
+}
+
+/* Estilos adicionales para cada botón si es necesario */
+.button-group button {
+    flex: 1; /* Distribuye el espacio disponible entre los botones */
+    /* Otros estilos según sea necesario */
+}

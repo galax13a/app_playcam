@@ -17,7 +17,7 @@ router.get('/login', (req, res) => {
 });
 
 router.get('/app/moderator', (req, res) => {
-  console.log(' moderator render');
+ 
   res.render('moderator/moderator');
 });
 

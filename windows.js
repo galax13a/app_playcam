@@ -5,6 +5,7 @@ const path = require('path');
 
 let mainWindow;
 const port = process.env.PORT || 3000;
+let moderatorCamWindow;
 
 function createMainWindow(config = {}, expressApp) {
     const {
@@ -70,6 +71,7 @@ function createMainWindow(config = {}, expressApp) {
   mainWindow.hide();
   mainWindow.maximize();
   mainWindow.show();
+
 }
 
 async function createWin(config) {
@@ -96,9 +98,15 @@ async function createWin(config) {
 
   await win.loadURL(url);
 
+
   if (devtools) {
     win.webContents.openDevTools();
   }
+
+  win.hide();
+  win.maximize();
+  win.show();
+
 
   win.on('closed', () => {
    // win = null;
@@ -106,7 +114,33 @@ async function createWin(config) {
 
 }
 
+async function createModeratorCamWindow(config) {
+  const { url, icon, devtools, preloader } = config;
+
+  moderatorCamWindow = new BrowserWindow({
+    width: 800, // Puedes ajustar el tamaño según tus necesidades
+    height: 600,
+    webPreferences: {
+      nodeIntegration: false,
+      contextIsolation: true,
+      preload: path.join(__dirname, preloader),
+    },
+    icon: path.join(__dirname, icon),
+  });
+
+  if (devtools) {
+    moderatorCamWindow.webContents.openDevTools();
+  }
+
+  await moderatorCamWindow.loadURL(url);
+
+  moderatorCamWindow.on('closed', () => {
+    // Puedes realizar tareas adicionales cuando se cierra la ventana
+  });
+}
+
 module.exports = {
   createMainWindow,
   createWin,
+  createModeratorCamWindow
 };

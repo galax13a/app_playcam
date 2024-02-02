@@ -1,14 +1,19 @@
 // app.js
-const { app, ipcMain, Notification } = require('electron');
+//const { app, ipcMain, Notification} = require('electron');
+const { app,ipcMain } = require('electron')
 const express = require('express');
 const path = require('path');
 const routes = require('./routes');
 const { createMainWindow, createWin } = require('./windows'); // Importa el nuevo módulo
+const { Notification } = require('electron');
+// This will print a number (corresponding with QUERY_USER_NOTIFICATION_STATE)
+
 
 let Reload = true;
 let expressApp;
 let devtools = true; //open toolsDev
 let MainWinApp;
+let CopyTraductor = null; 
 
 if (Reload) {
   const reload = require('electron-reload');
@@ -42,20 +47,47 @@ async function startExpress() {
   return expressApp;
 }
 
+function showNotification() {
+  const NOTIFICATION_TITLE = 'Basic Notification';
+  const NOTIFICATION_BODY = 'Notification from the Main process';
+  // Crear una nueva instancia de Notification
+  const notification = new Notification({
+    title: NOTIFICATION_TITLE,
+    body: NOTIFICATION_BODY
+  });
+  notification.show();
+}
+
 app.whenReady().then(async () => {
   const expressApp = await startExpress();
   MainWinApp = createMainWindow({ width: 1200, height: 800, devtools: devtools }, expressApp);
+  app.setAppUserModelId(process.execPath);
+
+  showNotification();
 
   ipcMain.on('open-traductor-window', () => {
-
-    const traductorWindow = createWin({ // Traductor .. create
+    const traductorWindow = createWin({
       url: 'https://translate.google.com/?hl=es&tab=TT&sl=en&tl=es&op=translate',
       icon: 'public/images/logo2.png',
-      devtools: true, 
-      preloader:'./views/traductor/preload-traductor.js'
-    });    
-
+      devtools: true,
+      preloader: './views/traductor/preload-traductor.js'
+    });
   });
+
+  ipcMain.on('copied-text-traductor', (event, copiedText) => {
+    console.log('Texto copiado desde el traductor:', copiedText);
+    CopyTraductor = copiedText;  
+  });
+
+  ipcMain.on('open-moderatorcam-window', () => {
+    const moderatorCamWindow = createWin({
+      url: 'https://chaturbate.com/',
+      icon: 'public/images/logo2.png',
+      devtools: true,
+      preloader: './views/moderator/preload-moderator.js'
+    });
+  });
+
 
 });
 
@@ -69,3 +101,6 @@ app.on('activate', function () {
   }
 });
 
+app.on("ready", function () {
+  new Notification({ title: 'Test Notification', body: 'This is a test notification' }).show();
+});
