@@ -1,30 +1,63 @@
 <!-- app/views/moderator/moderator.ejs -->
-<div class="moderator-container">
+<div class="div-container">
     <h1>¡Bienvenido, Moderador!</h1>
 
-    <div class="moderator-info">
+    <div class="moderator-info mb-3">
         <p>Ser un moderador en esta sala de chat es una tarea crucial. Tu presencia ayuda a mantener un ambiente seguro
-            y agradable para todos los usuarios.</p>
-
-        <p>Como moderador, tienes las siguientes responsabilidades:</p>
-        <ul>
-            <li>Regulación de la sala y garantizar el cumplimiento de las normas.</li>
-            <li>Facilitar un ambiente positivo y respetuoso.</li>
-            <li>Brindar apoyo a otros usuarios.</li>
-            <li>Recomendar a la modelo y su contenido mediante mensajes privados (PM).</li>
-        </ul>
+            y agradable para todos los usuarios.</p>     
 
         <p>La importancia de tu rol radica en crear una experiencia positiva para todos los participantes y contribuir
             al éxito general de la sala de chat.</p>
     </div>
 
     <div class="button-group action-buttons">
-        <button id="btn-moderator-register" class="register-btn" >Register Modertor</button>
-        <button id="btn-moderator-Entranimiento" class="register-btn">Entranimiento Modertor</button>
-        <button id="btn-moderator-see-models" class="recommend-button">Ver modelos Azar</button>
-        <button id="btn-moderator-model" class="moderate-model-button">Moderar Modelo</button>
-        <button id="exhibitionist-cams-button" class="exhibitionist-cams-button">Exhibitionist Cams</button>
-        <div class="m-4" hx-on:click="alert('Clicked!')">Click</div>
+        <button id="btn-moderator-Entranimiento" class="register-btn d-none">Entranimiento</button>
+        <button onclick="IpcRenderJS('open-moderator-window')" id="btn-moderator-model" class="button-hopes">Moderate</button>     
+        <button id="btn-moderator-see-models" class="button-blue">Cams</button>        
+        <button id="btn-rec-monitor" class="button-pink">Records</button>
+        <button id="exhibitionist-cams-button" class="moderate-model-button green-over">Exhibitionists</button>        
+        <button id="btn-moderator-register" class="moderate-model-button">Register</button>
+    </div>
+
+    <div class="cajita">
+        <article>
+            <h1>El Papel del Moderador: Una Experiencia Completa</h1>
+    
+            <p>Ser un moderador en nuestra salas de chat no solo significa aplicar reglas, sino desempeñar un papel
+                que enriquece toda la comunidad. Vamos más allá de las responsabilidades fundamentales para explorar cómo
+                los moderadores completos hacen que nuestra plataforma sea única.</p>
+    
+            <h2 class="m-3">Responsabilidades del Moderador</h2>
+            <ul>
+                <li>Regulación de la Sala y Cumplimiento de Normas:</li>
+                <li>Facilitar un Ambiente Positivo y Respetuoso:</li>
+                <li>Apoyo a Otros Usuarios y Recomendación a la Modelo:</li>
+                <li>Herramientas Avanzadas para Moderar y Apoyar:</li>
+                <li>Explorar la Comunidad y Grabar Transmisiones:</li>
+            </ul>
+    
+            <h2>Logros de Ser Moderador en Salas de Transmisión</h2>
+            <p>Convertirte en un moderador no solo implica responsabilidades, sino también logros notables. Generar confianza
+                en la comunidad, proporcionar un ambiente seguro y participar en la construcción de una experiencia positiva
+                son hitos que caracterizan el éxito de un moderador.</p>
+    
+            <h2>Confianza en la Comunidad y Oportunidad de Moderar</h2>
+            <p>Generar confianza es fundamental. La comunidad confía en los moderadores para mantener la integridad de la
+                sala y fomentar un entorno respetuoso. Además, ser moderador no solo es un deber, sino una oportunidad de
+                influir positivamente en la dinámica de la sala de chat y contribuir al crecimiento de la comunidad.</p>
+    
+            <h2>Oportunidades Adicionales como Moderador Completo</h2>
+            <p>El rol completo del moderador va más allá de la moderación básica. Se presenta la oportunidad de moderar
+                modelos de preferencia, explorar artistas con nuestro programa, apoyar su actividad y animar la transmisión.
+                Además, la posibilidad de grabar transmisiones para evaluación futura brinda una herramienta valiosa para
+                mejorar el desempeño de la modelo.</p>
+    <br>
+          <hr>
+            <p>el papel del moderador completo no solo es cumplir reglas, sino contribuir a una experiencia
+                completa en nuestra comunidad. Apreciamos la dedicación de nuestros moderadores y reconocemos su papel
+                clave en el crecimiento y éxito de nuestra sala de chat. ¡Gracias por elevar juntos esta experiencia única!</p>
+        </article>
+    
     </div>
 
 </div>

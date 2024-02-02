@@ -1,7 +1,13 @@
 
-console.log('DOMContentLoaded Moderator');
+//console.log('DOMContentLoaded Moderator');
 
 function GetButtonsEvents() {
+
+    /*
+    document.getElementById('btn-moderator-model').addEventListener('click', function () {
+        console.log('Click en Moderar');
+    });
+    *//*
 
     document.getElementById('btn-moderator-register').addEventListener('click', function (event) {
         console.log('Click en Register Modertor');
@@ -15,11 +21,12 @@ function GetButtonsEvents() {
         console.log('Click en Ver modelos Azar');
     });
 
-    document.getElementById('btn-moderator-model').addEventListener('click', function () {
-        console.log('Click en Moderar Modelo');
-    });
-
     document.getElementById('exhibitionist-cams-button').addEventListener('click', function () {
         console.log('Click en Exhibitionist Cams');
     });
+    document.getElementById('btn-rec-monitor').addEventListener('click', function () {
+        console.log('Click rec Cams');
+    });
+    */
+    
 }

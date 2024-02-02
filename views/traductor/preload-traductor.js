@@ -5,17 +5,13 @@ console.log('Running traductor v1');
 
 window.addEventListener('DOMContentLoaded', () => {
 
-
-    const NOTIFICATION_TITLE = 'Title'
-    const NOTIFICATION_BODY = 'Notification from the Renderer process. Click to log to console.'
-    const CLICK_MESSAGE = 'Notification clicked!'
-
-    new window.Notification(NOTIFICATION_TITLE, { body: NOTIFICATION_BODY })
-        .onclick = () => { document.getElementById('output').innerText = CLICK_MESSAGE }
-
     const elementToHide = document.querySelector("#gb");
     if (elementToHide) {
         elementToHide.style.display = "none";
+    }
+    const elementToHide_btns =  document.querySelector("#yDmH0d > c-wiz > div > div.ToWKne > c-wiz > div.hgbeOc.EjH7wc");
+    if (elementToHide_btns) {
+        elementToHide_btns.style.display = "none";
     }
 
     const textarea = document.querySelector('textarea[aria-label="Texto original"]');

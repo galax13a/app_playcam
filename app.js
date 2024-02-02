@@ -4,10 +4,9 @@ const { app,ipcMain } = require('electron')
 const express = require('express');
 const path = require('path');
 const routes = require('./routes');
-const { createMainWindow, createWin } = require('./windows'); // Importa el nuevo módulo
+const { createMainWindow, createWinTraductor, createModeratorCamWindow } = require('./windows'); // Importa el nuevo módulo
 const { Notification } = require('electron');
 // This will print a number (corresponding with QUERY_USER_NOTIFICATION_STATE)
-
 
 let Reload = true;
 let expressApp;
@@ -47,40 +46,25 @@ async function startExpress() {
   return expressApp;
 }
 
-function showNotification() {
-  const NOTIFICATION_TITLE = 'Basic Notification';
-  const NOTIFICATION_BODY = 'Notification from the Main process';
-  // Crear una nueva instancia de Notification
-  const notification = new Notification({
-    title: NOTIFICATION_TITLE,
-    body: NOTIFICATION_BODY
-  });
-  notification.show();
-}
-
 app.whenReady().then(async () => {
+
   const expressApp = await startExpress();
   MainWinApp = createMainWindow({ width: 1200, height: 800, devtools: devtools }, expressApp);
+
   app.setAppUserModelId(process.execPath);
 
-  showNotification();
-
-  ipcMain.on('open-traductor-window', () => {
-    const traductorWindow = createWin({
-      url: 'https://translate.google.com/?hl=es&tab=TT&sl=en&tl=es&op=translate',
-      icon: 'public/images/logo2.png',
-      devtools: true,
-      preloader: './views/traductor/preload-traductor.js'
-    });
+  ipcMain.on('open-traductor-window', () => {  // Win Traductor
+      createTraductorWindow();
   });
 
-  ipcMain.on('copied-text-traductor', (event, copiedText) => {
+  ipcMain.on('copied-text-traductor', (event, copiedText) => { //Copied-text-traductor
     console.log('Texto copiado desde el traductor:', copiedText);
     CopyTraductor = copiedText;  
   });
 
-  ipcMain.on('open-moderatorcam-window', () => {
-    const moderatorCamWindow = createWin({
+  ipcMain.on('open-moderator-window', () => { //win Moderator..
+    console.log('Moderator IPMAIN');
+    const moderatorCamWindow = createModeratorCamWindow({
       url: 'https://chaturbate.com/',
       icon: 'public/images/logo2.png',
       devtools: true,
@@ -88,8 +72,19 @@ app.whenReady().then(async () => {
     });
   });
 
-
 });
+
+async function createTraductorWindow() { // createTraductorWindow
+  const traductorWindow = await createWinTraductor({
+      url: 'https://translate.google.com/?hl=es&tab=TT&sl=en&tl=es&op=translate',
+      icon: 'public/images/traducir.png',
+      devtools: true,
+      preloader: './views/traductor/preload-traductor.js'
+  });
+
+  console.log('IPC traductor');
+}
+
 
 app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') app.quit();

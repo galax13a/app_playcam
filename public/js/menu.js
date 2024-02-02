@@ -53,76 +53,67 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         link.addEventListener('click', function (event) {
+            
             event.preventDefault();
             links.forEach(function (otherLink) {
                 otherLink.classList.remove('active');
             });
+
             link.classList.add('active');
             // Guardar la ruta activa
             guardarUltimaRuta(link.getAttribute('hx-get'));
-
-
-            if ( cargarUltimaRuta()  === '/app/moderator') {
-                console.log('moderator ruta');
+            if (cargarUltimaRuta() === '/app/moderator') {
+                //     console.log('moderator ruta');
                 var script = document.createElement('script');
-                script.src = '/js/render-moderator.js';
+                script.src = '/js/renders/R-moderator.js';
                 script.defer = true;
-                
                 script.addEventListener('load', function () {
                     setTimeout(function () {
                         GetButtonsEvents();
-                    }, 1000);
+                    }, 600);
                 });
-            
                 document.body.appendChild(script);
             } else {
-                console.log('No es la ruta del moderator, removiendo el script');
+                // console.log('No es la ruta del moderator, removiendo el script');
                 var existingScript = document.querySelector('script[src="/js/render-moderator.js"]');
-                
+
                 if (existingScript) {
                     existingScript.parentNode.removeChild(existingScript);
                 }
             }
 
-
         });
     });
-    
+
 
     if (next_router === '/app/moderator') {
-        console.log('moderator ruta');
+        // console.log('moderator ruta');
         var script = document.createElement('script');
-        script.src = '/js/render-moderator.js';
+        script.src = '/js/renders/R-moderator.js';
         script.defer = true;
-        
         script.addEventListener('load', function () {
             setTimeout(function () {
                 GetButtonsEvents();
             }, 1000);
         });
-    
         document.body.appendChild(script);
     } else {
-        console.log('No es la ruta del moderator, removiendo el script');
+        //console.log('No es la ruta del moderator, removiendo el script');
         var existingScript = document.querySelector('script[src="/js/render-moderator.js"]');
-        
         if (existingScript) {
             existingScript.parentNode.removeChild(existingScript);
         }
     }
-    
 
     window.addEventListener('load', function () { // load dashboard
-        var xhr = new XMLHttpRequest();
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState == 4 && xhr.status == 200) {
-                document.getElementById('app_content').innerHTML = xhr.responseText;
-            }
-        };
-
-        xhr.open('GET', next_router, true);
-        xhr.send();
-
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    document.getElementById('app_content').innerHTML = xhr.responseText;
+                }
+            };
+            xhr.open('GET', next_router, true);
+            xhr.send();
     });
 
 
