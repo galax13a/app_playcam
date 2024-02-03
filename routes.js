@@ -1,6 +1,10 @@
 // apps/routes.js
 const express = require('express');
 const path = require('path');
+const ytdl = require('ytdl-core');
+const fs = require('fs');
+const { app } = require('electron');
+
 require('dotenv').config({ path: path.join(__dirname,'..','src', '.env') });
 const router = express.Router();
 
@@ -73,5 +77,139 @@ router.get('/app/lougee', (req, res) => {
 router.get('/app/settings', (req, res) => {  
   res.render('settings/settings', { message: 'Hola desde Settings!' });
 });
+
+/* youtube */ 
+//const audiosDirectory = path.join(__dirname, 'public', 'audios', 'youtube');
+const audiosDirectory = path.join(app.getPath('userData'), 'public', 'audios', 'youtube');
+
+
+router.get('/app/youtube', (req, res) => {
+  if (!fs.existsSync(audiosDirectory)) {
+    res.render('youtube/youtube', { audioFiles: [] });
+    return;
+  }
+  const audioFiles = fs.readdirSync(audiosDirectory);
+  res.render('youtube/youtube', { audioFiles });
+});
+
+/*
+
+router.get('/app/youtube', (req, res) => {
+  try {
+    const folderPath = path.join(__dirname, 'public', 'audios', 'youtube');
+    if (!fs.existsSync(folderPath)) {
+        res.render('youtube/youtube', { audioFiles: [] });
+        return;
+    }
+
+    const audioFiles = fs.readdirSync(folderPath)
+      .map((file) => {
+        const filePath = path.join(folderPath, file);
+        const stats = fs.statSync(filePath);
+        return {
+          name: file,
+          created: stats.ctime, // Fecha de creación
+        };
+      })
+      .sort((a, b) => b.created - a.created) // Ordenar de manera descendente por fecha de creación
+      .map((file) => file.name);
+
+    res.render('youtube/youtube', { audioFiles });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error reading audio files');
+  }
+});
+*/
+router.post('/app/youtube/download', async (req, res) => {
+  const { videoUrl } = req.body;
+
+  try {
+    const info = await ytdl.getInfo(videoUrl);
+    const audioFormats = ytdl.filterFormats(info.formats, 'audioonly');
+    const audioUrl = audioFormats[0].url;
+
+    // Obtener el título del video y formatearlo como nombre de archivo
+    const rawTitle = info.videoDetails.title;
+    const cleanedTitle = rawTitle.replace(/[^\w\s]/gi, '').replace(/\s+/g, '_');
+    const randomSuffix = `_${Math.floor(Math.random() * 100)}`;
+    const formattedTitle = `${cleanedTitle}${randomSuffix}.mp3`;
+
+    const filePath = path.join(audiosDirectory, formattedTitle);
+
+    // Verificar si la carpeta existe, de lo contrario, crearla
+    if (!fs.existsSync(audiosDirectory)) {
+      fs.mkdirSync(audiosDirectory, { recursive: true });
+    }
+
+    res.header('Content-Disposition', `attachment; filename="${formattedTitle}"`);
+
+    const video = ytdl(videoUrl, { quality: 'highestaudio', filter: 'audioonly' });
+
+    video.pipe(fs.createWriteStream(filePath))
+      .on('finish', () => {
+        console.log(`Audio downloaded and saved at: ${filePath}`);
+        // Realizar una redirección a la ruta que obtiene el nuevo listado de audios
+        res.redirect('/app/youtube');
+      })
+      .on('error', (error) => {
+        console.error(error);
+        res.status(500).send('Error during download');
+      });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error during download / error / ' + error);
+  }
+});
+
+router.get('/app/youtube/play/:audio', (req, res) => {
+  const audioFile = req.params.audio;
+  const filePath = path.join(audiosDirectory, audioFile);
+  const stat = fs.statSync(filePath);
+  const fileSize = stat.size;
+  const range = req.headers.range;
+
+  if (range) {
+      const parts = range.replace(/bytes=/, "").split("-");
+      const start = parseInt(parts[0], 10);
+      const end = parts[1] ? parseInt(parts[1], 10) : fileSize - 1;
+
+      const chunksize = (end - start) + 1;
+      const file = fs.createReadStream(filePath, { start, end });
+      const head = {
+          'Content-Range': `bytes ${start}-${end}/${fileSize}`,
+          'Accept-Ranges': 'bytes',
+          'Content-Length': chunksize,
+          'Content-Type': 'audio/mpeg',
+      };
+
+      res.writeHead(206, head);
+      file.pipe(res);
+  } else {
+      const head = {
+          'Content-Length': fileSize,
+          'Content-Type': 'audio/mpeg',
+      };
+
+      res.writeHead(200, head);
+      fs.createReadStream(filePath).pipe(res);
+  }
+});
+
+
+router.get('/app/youtube/delete/:audio', (req, res) => {
+  const audioFile = req.params.audio;
+  const filePath = path.join(audiosDirectory, audioFile);
+
+  try {
+    fs.unlinkSync(filePath);
+    console.log(`Audio deleted: ${filePath}`);
+    res.redirect('/app/youtube');
+  } catch (error) {
+    console.error(error);
+    res.status(500).send(`Error during deletion.<br> <a href="/app/youtube">Go back to Youtube Play </a>`);
+  }
+});
+
 
 module.exports = router;

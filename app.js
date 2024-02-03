@@ -1,18 +1,19 @@
 // app.js
 //const { app, ipcMain, Notification} = require('electron');
-const { app,ipcMain } = require('electron')
+const { app,ipcMain, BrowserWindow  } = require('electron')
 const express = require('express');
 const path = require('path');
 const routes = require('./routes');
 const { createMainWindow, createWinTraductor, createModeratorCamWindow } = require('./windows'); // Importa el nuevo módulo
 const { Notification } = require('electron');
-// This will print a number (corresponding with QUERY_USER_NOTIFICATION_STATE)
+const cors = require('cors');
 
-let Reload = true;
+let Reload = false;
 let expressApp;
 let devtools = true; //open toolsDev
 let MainWinApp;
 let CopyTraductor = null; 
+const PORT = process.env.PORT || 3069;
 
 if (Reload) {
   const reload = require('electron-reload');
@@ -32,10 +33,11 @@ async function startExpress() {
   expressApp.set('views', path.join(__dirname, 'views'));
   expressApp.use(express.static(path.join(__dirname, 'public')));
   expressApp.use('/modules', express.static(path.join(__dirname, '../node_modules')));
-
+  expressApp.use(express.urlencoded({ extended: true }));
+  expressApp.use(cors());  // Permitir solicitudes CORS
   expressApp.use(routes);
 
-  const PORT = process.env.PORT || 3069;
+  
   await new Promise(resolve => {
     expressApp.listen(PORT, () => {
       console.log(`Express server running on http://localhost:${PORT}`);
@@ -70,6 +72,15 @@ app.whenReady().then(async () => {
       devtools: true,
       preloader: './views/moderator/preload-moderator.js'
     });
+  });
+
+  ipcMain.on('open-youtube-window', () => { //win Moderator..
+   
+    console.log('Moderator youtube');
+    const win = new BrowserWindow({ width: 800, height: 600 });
+    win.loadURL(`http://localhost:${PORT}/app/youtube`);
+    win.setMenu(null);
+
   });
 
 });

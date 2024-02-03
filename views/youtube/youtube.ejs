@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Playcam - YouTube Audio Downloader</title>
+    <link rel="icon" href="/images/logo2.png" type="image/png">
+    <style>
+        body {
+            font-family: 'Helvetica', sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 50px;
+        }
+
+        h1, h2 {
+            color: #343a40;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 16px;
+            color: #343a40;
+        }
+
+        .input {
+            width: 96%;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+
+        .button-pink {
+            background-image: linear-gradient(120deg, #f093fb 0%, #f5576c 100%);
+            color: #fff;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            color: #fff;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            padding: 20px;
+            transition: background-color 0.3s ease;
+            position: relative;
+        }
+
+        li::before {
+            content: '';
+            color: #4CAF50;
+            font-size: 1.2em;
+            margin-right: 10px;
+        }
+
+        li:hover {
+            background-color: #e9ecef;
+        }
+
+        audio {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        a {
+            color: #007bff;
+            text-decoration: none;
+            margin-left: 10px;
+        }
+
+        p {
+            color: #868e96;
+        }
+
+        .modal-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5); /* Semitransparente */
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Estilo para el indicador de carga */
+        #loading-indicator {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            z-index: 2; /* Añadido */
+        }
+
+    </style>
+</head>
+<body>
+    <div class="modal-background" id="modalBackground">
+        <div id="loading-indicator">
+            Loading...
+        </div>
+    </div>
+    <div class="container">
+        <h1>Playcam - YouTube Audio Player</h1>
+             
+        <form action="/app/youtube/download" method="post">
+            <label for="videoUrl">YouTube Video URL:</label>
+            <input type="text" class="input" id="videoUrl" name="videoUrl" required>
+            <button type="submit" class="button-pink"  id="downloadButton">Download Audio</button>
+        </form>
+
+        <h2>Available Audios:</h2>
+        <% if (audioFiles.length > 0) { %>
+            <ul>
+                <% audioFiles.forEach(audio => { %>
+                    <li>
+                        <audio controls>
+                            <source src="/app/youtube/play/<%= encodeURIComponent(audio) %>" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                        <%= audio %>
+                        <a href="/app/youtube/delete/<%= encodeURIComponent(audio) %>">Delete</a>
+                    </li>
+                <% }); %>
+            </ul>
+        <% } else { %>
+            <p>No audio files available.</p>
+        <% } %>
+    </div>
+
+    <script>
+        document.getElementById('downloadButton').addEventListener('click', function() {    
+            document.getElementById('loading-indicator').style.display = 'block';
+        });
+    </script>
+
+</body>
+</html>
