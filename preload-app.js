@@ -3,14 +3,27 @@ const { ipcRenderer, remote } = require('electron');
 console.log('Running App  preload v1')
 
 window.IpcRenderJS = function (eventType) {
-  window.addEventListener(eventType, function (event) {
-      console.log('Evento Win detectado:', event.detail);
-      ipcRenderer.send(event.detail);
-  });
+  // Verificar si ya hay un listener para este eventType
+  const existingListener = window._ipcRenderJSListeners && window._ipcRenderJSListeners[eventType];
+  // Si ya hay un listener, eliminarlo antes de agregar uno nuevo
+  if (existingListener) {
+    window.removeEventListener(eventType, existingListener);
+  }
+  // Agregar el nuevo listener
+  const listener = function (event) {
+    console.log('Evento Win detectado:', event.detail);
+    ipcRenderer.send(event.detail);
+  };
+  window.addEventListener(eventType, listener);
+  // Guardar el listener para poder eliminarlo más tarde si es necesario
+  if (!window._ipcRenderJSListeners) {
+    window._ipcRenderJSListeners = {};
+  }
+  window._ipcRenderJSListeners[eventType] = listener;
+  // Crear y despachar el evento personalizado
   var eventoWin = new CustomEvent(eventType, {
-      detail: eventType
+    detail: eventType
   });
-
   window.dispatchEvent(eventoWin);
 };
 
@@ -41,13 +54,13 @@ window.addEventListener('DOMContentLoaded', () => {
   const btn_maximize = document.querySelector("#win-maximize")
   btn_maximize.addEventListener('click', () => {
     ipcRenderer.send('maximize-win-main');
-
   });
-
-   document.getElementById('traductor-link').addEventListener('click', function (event) {
-    ipcRenderer.send('open-moderator');
-  });
-
   
+  /*
+   document.getElementById('traductor-link').addEventListener('click', function (event) {
+    ipcRenderer.send('open-traductor-window');
+  });
+  */
+
 
 })

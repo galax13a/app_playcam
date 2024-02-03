@@ -3,16 +3,15 @@
 const { BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 
-let mainWindow, Win_traductor;
-let Win_traductorVisible = false;
+let mainWindow, Win_traductor, Win_moderator;
+let Win_traductorVisible = false, Win_moderatorVisible = false;
 const port = process.env.PORT || 3000;
-let moderatorCamWindow;
 
-function createMainWindow(config = {}, expressApp) {
+function createMainWindow(config = {}) {
   const {
     devtools = false,
     preload = 'preload-app.js',
-    icon = 'public/images/logo2.png',//icon = '../src/icons/icon2.png',
+    icon = 'public/images/logo2.png',
     width = 800,
     height = 600,
   } = config;
@@ -21,7 +20,7 @@ function createMainWindow(config = {}, expressApp) {
     width,
     height,
     frame: false,
-    resizable: false,    
+    resizable: true,
     webPreferences: {
       nodeIntegrationInWorker: true,
       enableRemoteModule: true,
@@ -30,12 +29,11 @@ function createMainWindow(config = {}, expressApp) {
       enableRemoteModule: true,
       preload: path.join(__dirname, preload),
       cache: {
-        maxAge: 60 * 60 * 24 * 7 // 90 días 7 días
-      }
+        maxAge: 60 * 60 * 24 * 7,
+      },
     },
     icon: path.join(__dirname, icon),
   });
-
 
   if (devtools) mainWindow.webContents.openDevTools();
 
@@ -71,11 +69,9 @@ function createMainWindow(config = {}, expressApp) {
   });
 
   mainWindow.hide();
-  mainWindow.maximize();  
+  mainWindow.maximize();
   mainWindow.show();
-
 }
-
 
 async function createWinTraductor(config) {
   const { url, icon, devtools, preloader } = config;
@@ -96,8 +92,8 @@ async function createWinTraductor(config) {
         preload: path.join(__dirname, preloader),
       },
       icon: path.join(__dirname, icon),
-      frame: true, // Oculta la barra de título
-      autoHideMenuBar: true, // Oculta la barra de menú
+      frame: true,
+      autoHideMenuBar: true,
     });
 
     Win_traductor.on('closed', () => {
@@ -118,41 +114,46 @@ async function createWinTraductor(config) {
     Win_traductor.hide();
     Win_traductor.maximize();
     Win_traductor.show();
-
+    Win_traductorVisible = true;
   }
 
-  Win_traductorVisible = true;
   return Win_traductorVisible;
-
 }
 
 async function createModeratorCamWindow(config) {
   const { url, icon, devtools, preloader } = config;
+console.log(`createModeratorCamWindow : ${Win_moderatorVisible}`);
+  if (!Win_moderatorVisible) {
+    Win_moderator = new BrowserWindow({
+      width: 800,
+      height: 600,
+      webPreferences: {
+        nodeIntegration: false,
+        contextIsolation: true,
+        preload: path.join(__dirname, preloader),
+      },
+      icon: path.join(__dirname, icon),
+    });
 
-  moderatorCamWindow = new BrowserWindow({
-    width: 800, // Puedes ajustar el tamaño según tus necesidades
-    height: 600,
-    webPreferences: {
-      nodeIntegration: false,
-      contextIsolation: true,
-      preload: path.join(__dirname, preloader),
-    },
-    icon: path.join(__dirname, icon),
-  });
+    if (devtools) {
+      Win_moderator.webContents.openDevTools();
+    }
 
-  if (devtools) {
-    moderatorCamWindow.webContents.openDevTools();
-  }
+    await Win_moderator.loadURL(url);
 
-  await moderatorCamWindow.loadURL(url);
+    Win_moderator.on('closed', () => {
+      Win_moderatorVisible = false;
+      Win_moderator = null;
+    });
 
-  moderatorCamWindow.on('closed', () => {
-    // Puedes realizar tareas adicionales cuando se cierra la ventana
-  });
+    Win_moderatorVisible = true;
+  } else return false;
+
+  return Win_moderator;
 }
 
 module.exports = {
   createMainWindow,
   createWinTraductor,
-  createModeratorCamWindow
+  createModeratorCamWindow,
 };

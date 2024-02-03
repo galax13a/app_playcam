@@ -62,6 +62,10 @@ router.get('/app/traductor', (req, res) => {
   res.render('traductor/traductor', { message: 'Hola desde Traductor!' });
 });
 
+router.get('/app/traductor/audio', (req, res) => {  
+  res.render('traductor/traductor_audio', { message: 'start recording your greetings or want to go faster than writing!' });
+});
+
 router.get('/app/lougee', (req, res) => {  
   res.render('lougee/lougee', { message: 'Hola desde Lougee!' });
 });
