@@ -14,6 +14,7 @@ let devtools = true; //open toolsDev
 let MainWinApp;
 let CopyTraductor = null; 
 const PORT = process.env.PORT || 3069;
+let Win_Youtube;
 
 if (Reload) {
   const reload = require('electron-reload');
@@ -76,10 +77,20 @@ app.whenReady().then(async () => {
 
   ipcMain.on('open-youtube-window', () => { //win Moderator..
    
-    console.log('Moderator youtube');
-    const win = new BrowserWindow({ width: 800, height: 600 });
-    win.loadURL(`http://localhost:${PORT}/app/youtube`);
-    win.setMenu(null);
+    console.log('Canal youtube');
+    Win_Youtube = new BrowserWindow({
+      width: 960,
+      height: 700,
+      icon: path.join(__dirname, 'public', 'images', 'youtube.png'), // Ruta al archivo de icono
+  });
+  
+  Win_Youtube.loadURL(`http://localhost:${PORT}/app/youtube`);
+  Win_Youtube.setMenu(null);
+
+  Win_Youtube.on('closed', () => {
+    // Establecer la variable 'win' a null cuando la ventana se cierre
+    Win_Youtube = null;
+  });
 
   });
 

@@ -139,7 +139,10 @@
         <h1>Playcam - YouTube Audio Player</h1>
              
         <form action="/app/youtube/download" method="post">
-            <label for="videoUrl">YouTube Video URL:</label>
+            <label for="videoUrl">YouTube Video URL:
+                <a href="#" onclick="pasteFromClipboard()">Paste from Clipboard</a>
+                |     <a href="#" onclick="refreshPage()">Refresh</a>
+            </label>
             <input type="text" class="input" id="videoUrl" name="videoUrl" required>
             <button type="submit" class="button-pink"  id="downloadButton">Download Audio</button>
         </form>
@@ -167,6 +170,22 @@
         document.getElementById('downloadButton').addEventListener('click', function() {    
             document.getElementById('loading-indicator').style.display = 'block';
         });
+        async function pasteFromClipboard() {
+            try {
+                // Obtener el contenido del portapapeles
+                const clipboardContent = await navigator.clipboard.readText();
+
+                // Establecer el contenido en el campo de entrada
+                document.getElementById('videoUrl').value = clipboardContent;
+            } catch (error) {
+                console.error('Error al leer el portapapeles:', error);
+            }
+        }
+
+        function refreshPage() {
+            // Recargar la página
+            location.reload();
+        }
     </script>
 
 </body>

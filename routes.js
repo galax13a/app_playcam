@@ -196,7 +196,6 @@ router.get('/app/youtube/play/:audio', (req, res) => {
   }
 });
 
-
 router.get('/app/youtube/delete/:audio', (req, res) => {
   const audioFile = req.params.audio;
   const filePath = path.join(audiosDirectory, audioFile);
@@ -204,12 +203,16 @@ router.get('/app/youtube/delete/:audio', (req, res) => {
   try {
     fs.unlinkSync(filePath);
     console.log(`Audio deleted: ${filePath}`);
+    const modulePath = require.resolve(audiosDirectory); // Reemplaza con la ruta completa a tu archivo
+    delete require.cache[modulePath];
+
     res.redirect('/app/youtube');
   } catch (error) {
     console.error(error);
-    res.status(500).send(`Error during deletion.<br> <a href="/app/youtube">Go back to Youtube Play </a>`);
+    res.status(500).send(`Error during deletion.<br> or the file may have already been deleted <br> <a href="/app/youtube">Go back to Youtube Play </a> Error /  ${error}` );
   }
 });
+
 
 
 module.exports = router;
