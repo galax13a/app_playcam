@@ -368,4 +368,115 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
 
+    // modochat
+ // Función para ocultar elementos
+function hideElements() {
+    const navbar = document.querySelector("#header > div.nav-bar");
+    const genderTabs = document.querySelector("#main > div > div.genderTabs.bgColor.navigationAlt2BgImage.navigationAlt2BgColor.tabSectionBorder.top-section");
+    const roomTabs = document.querySelector("#roomTabs");
+    const chat = document.querySelector("#ChatTabContainer");
+
+    if (navbar) {
+        navbar.style.display = 'none';
+    }
+    if (genderTabs) {
+        genderTabs.style.display = 'none';
+    }
+    if (roomTabs) {
+        roomTabs.style.display = 'none';
+    }
+    if (chat) {
+        chat.style.display = 'none';
+    }
+}
+
+// Función para mostrar elementos
+function showElements() {
+    const navbar = document.querySelector("#header > div.nav-bar");
+    const genderTabs = document.querySelector("#main > div > div.genderTabs.bgColor.navigationAlt2BgImage.navigationAlt2BgColor.tabSectionBorder.top-section");
+    const roomTabs = document.querySelector("#roomTabs");
+    const chat = document.querySelector("#ChatTabContainer");
+
+    if (navbar) {
+        navbar.style.display = 'block';
+    }
+    if (genderTabs) {
+        genderTabs.style.display = 'block';
+    }
+    if (roomTabs) {
+        roomTabs.style.display = 'block';
+    }    
+    if (chat) {
+        chat.style.display = 'block';
+    }
+}
+
+// Función para manejar el modo chat toggle
+function toggleModeChat() {
+    const modeChatToggle = localStorage.getItem('modeChatToggle');
+
+    if (modeChatToggle === 'true') {
+        hideElements();
+    } else {
+        showElements();
+    }
+}
+
+toggleModeChat();
+
+const modeChatLink = document.getElementById('link6');
+if (modeChatLink) {
+    modeChatLink.addEventListener('click', function (event) {
+        const activeModelElement = document.querySelector("#main > div > div.genderTabs.bgColor.navigationAlt2BgImage.navigationAlt2BgColor.tabSectionBorder.top-section > div > div > a.gender-tab.tabElement.active.tabBorder.activeRoom.tabElementLink");
+
+        if (activeModelElement) {
+            // Aquí puedes agregar la lógica para activar el modo chat
+           // alert("Modo chat activado");
+           createNotification('Mode Chat Active');
+           document.querySelector("#video-mode").click();
+        } else {
+           // alert("To be in chat mode, you must be seeing a model.");
+            createNotification('To be in chat mode, you must be seeing a model.');
+            event.preventDefault(); // Prevenir la acción por defecto del enlace
+        }
+
+        // Cambiar el estado del modo chat toggle en el Local Storage
+        const modeChatToggle = localStorage.getItem('modeChatToggle');
+        if (modeChatToggle === 'true') {
+            localStorage.setItem('modeChatToggle', 'false');
+        } else {
+            localStorage.setItem('modeChatToggle', 'true');
+        }
+
+        // Alternar la visibilidad de los elementos
+        toggleModeChat();
+    });
+}
+
+function createNotification(message) {
+    const notificationDiv = document.createElement('div');
+    notificationDiv.style.position = 'fixed';
+    notificationDiv.style.top = '50%';
+    notificationDiv.style.left = '50%';
+    notificationDiv.style.transform = 'translate(-50%, -50%)';
+    notificationDiv.style.padding = '15px';
+    notificationDiv.style.backgroundColor = '#333';
+    notificationDiv.style.color = 'white';
+    notificationDiv.style.borderRadius = '8px';
+    notificationDiv.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.5)';
+    notificationDiv.style.zIndex = '9999';
+    notificationDiv.textContent = message;
+
+    document.body.appendChild(notificationDiv);
+
+    // Desvanecer después de 3 segundos
+    setTimeout(() => {
+        document.body.removeChild(notificationDiv);
+    }, 3000);
+}
+
+// Ejemplo de uso
+createNotification('Esta es una notificación de ejemplo.');
+
+
 });
