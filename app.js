@@ -68,8 +68,8 @@ app.whenReady().then(async () => {
   ipcMain.on('open-moderator-window', () => { //win Moderator..
     console.log('Moderator IPMAIN');
     const moderatorCamWindow = createModeratorCamWindow({
-      url: 'https://chaturbate.com/',
-      icon: 'public/images/logo2.png',
+      url: 'https://en.chaturbate.com/',
+      icon: 'public/images/moderator.png',
       devtools: true,
       preloader: './views/moderator/preload-moderator.js'
     });

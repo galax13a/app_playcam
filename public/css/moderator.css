@@ -13,9 +13,10 @@ header {
 }
 
 nav {
-    background-color: #333;
+    background-color: #d80b60cb;
     color: white;
     padding: 10px;
+    font-family:  monospace;
 }
 
 ul {

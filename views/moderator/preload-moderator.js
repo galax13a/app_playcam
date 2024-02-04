@@ -1,8 +1,67 @@
 const { ipcRenderer, remote } = require('electron');
-
 console.log('Running Moderator v1.1');
 
+setTimeout(() => {
+    hideOverlay();
+    document.body.style.display = 'block'; // Mostrar el cuerpo después de ocultar el overlay
+}, 100);
+
+function hideOverlay() {
+    // Crear el overlay
+    const overlay = document.createElement('div');
+    overlay.id = 'overlay';
+    overlay.style.position = 'fixed';
+    overlay.style.top = '0';
+    overlay.style.left = '0';
+    overlay.style.width = '100%';
+    overlay.style.height = '100%';
+    overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.9)';
+    overlay.style.display = 'flex';
+    overlay.style.alignItems = 'center';
+    overlay.style.justifyContent = 'center';
+    overlay.style.zIndex = '99999';
+
+    const overlayContent = document.createElement('div');
+    overlayContent.style.color = 'white';
+    overlayContent.style.fontSize = '24px';
+    overlayContent.textContent = 'Loanding...';
+    overlay.appendChild(overlayContent);
+    document.body.appendChild(overlay);
+    setTimeout(() => {
+        document.body.removeChild(overlay);
+    }, 2000);
+}
+
 document.addEventListener('DOMContentLoaded', function () {
+
+
+    const styles = `
+  * {
+    scrollbar-width: auto;
+    scrollbar-color: #640080a6 #0a0a0b;
+  }
+
+  /* Chrome, Edge, y Safari */
+  *::-webkit-scrollbar {
+    width: 9px;    
+  }
+
+  *::-webkit-scrollbar-track {
+    background: #0a0a0b;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background-color: #640080a6;
+    border-radius: 10px;
+    border: 3px solid #0d1c19;
+  }
+`;
+
+    const styleElement = document.createElement('style');
+    styleElement.type = 'text/css';
+    styleElement.appendChild(document.createTextNode(styles));
+
+    document.head.appendChild(styleElement);
 
     document.body.style.padding = '9px';
     document.body.style.background = "#333";
@@ -94,70 +153,219 @@ document.addEventListener('DOMContentLoaded', function () {
     document.body.display = 'block';
 
     // Crear el menú flotante
-const floatingMenu = document.createElement('div');
-floatingMenu.id = 'NavModerator';
-floatingMenu.classList.add('nav-bar');
-floatingMenu.style.position = 'fixed';
-floatingMenu.style.bottom = '0';
-floatingMenu.style.width = '100%';
-floatingMenu.style.minHeight = '60px';
-floatingMenu.style.backgroundColor = 'rgba(51, 51, 51, 0.9)';
-floatingMenu.style.color = 'white';
-floatingMenu.style.padding = '2px 2px 4px 15px';
-floatingMenu.style.borderBottom = '3px solid rgba(216, 11, 96, 0.796)';
-floatingMenu.style.boxShadow = 'rgba(255, 255, 0, 0.5) 0px 4px 8px';
-floatingMenu.style.marginTop = '3px';
+    const floatingMenu = document.createElement('div');
+    floatingMenu.id = 'NavModerator';
+    floatingMenu.classList.add('nav-bar');
+    floatingMenu.style.position = 'fixed';
+    floatingMenu.style.bottom = '0';
+    floatingMenu.style.width = '100%';
+    floatingMenu.style.minHeight = '36px';
+    floatingMenu.style.backgroundColor = 'rgba(51, 51, 51, 0.9)';
+    floatingMenu.style.color = 'white';
+    floatingMenu.style.padding = '2px 2px 4px 15px';
+    floatingMenu.style.borderBottom = '3px solid rgba(216, 11, 96, 0.796)';
+    floatingMenu.style.boxShadow = 'rgba(255, 255, 0, 0.5) 0px 4px 8px';
+    floatingMenu.style.marginTop = '3px';
+    floatingMenu.style.marginLeft = '-26px';
 
-// Crear el contenedor <ul>
-const ulContainer = document.createElement('ul');
-ulContainer.style.listStyle = 'none';
-ulContainer.style.margin = '0';
-ulContainer.style.padding = '0';
-ulContainer.style.display = 'flex'; // Hacer que los elementos flexibles se alineen en una fila
+    // Crear el contenedor <ul>
+    const ulContainer = document.createElement('ul');
+    ulContainer.style.listStyle = 'none';
+    ulContainer.style.margin = '0';
+    ulContainer.style.padding = '6px';
+    ulContainer.style.display = 'flex'; // Hacer que los elementos flexibles se alineen en una fila
 
-// Función para aplicar estilos a los enlaces
-function applyLinkStyles(link) {
-    link.style.display = 'inline-block';
-    link.style.marginRight = '15px'; // Añadir espacio entre enlaces
-    link.style.color = 'white';
-    link.style.textDecoration = 'none';
-    link.style.fontSize = '2.26rem'; // Tamaño de letra
-    link.style.fontWeight = 'bold'; // Negrita
-    link.style.padding = '3px';
-    link.style.margin = '3px';
+    // Función para aplicar estilos a los enlaces
+    function applyLinkStyles(link) {
+        link.style.display = 'inline-block';
+        link.style.marginRight = '15px'; // Añadir espacio entre enlaces
+        link.style.color = 'white';
+        link.style.textDecoration = 'none';
+        link.style.fontSize = '2.26rem'; // Tamaño de letra
+        link.style.fontWeight = 'bold'; // Negrita
+        link.style.padding = '3px';
+        link.style.margin = '3px';
 
-}
 
-// Función para crear enlaces
-function createLink(id, text) {
-    const liElement = document.createElement('li');
-    const link = document.createElement('a');
-    link.href = '#';
-    link.id = id;
-    link.textContent = text;
-    applyLinkStyles(link);
+    }
 
-    liElement.appendChild(link);
-    return liElement;
-}
+    // Función para crear enlaces
+    function createLink(id, text, linker = "#") {
+        const liElement = document.createElement('li');
+        const link = document.createElement('a');
+        link.href = linker;
+        link.id = id;
 
-// Crear enlaces
-const links = [
-    createLink('link1', 'Search'),
-    createLink('link2', 'Send Scheduled Tokens'),
-    createLink('link3', 'Login'),
-    createLink('link4', 'Join the Community'),
-    createLink('link5', 'Follow'),
-    createLink('link6', 'Mode Chat'), // Nuevo enlace
-];
+        link.textContent = text;
+        applyLinkStyles(link);
 
-// Agregar enlaces al contenedor <ul>
-links.forEach(link => ulContainer.appendChild(link));
+        liElement.appendChild(link);
+        return liElement;
+    }
 
-// Agregar el contenedor <ul> al menú flotante
-floatingMenu.appendChild(ulContainer);
+    // Crear enlaces
+    const links = [
+        createLink('link0', 'Playcam', 'https://en.chaturbate.com'),
+        createLink('link1', 'Search'),
+        createLink('link6', 'Mode Chat'),
+        createLink('link2', 'Send Scheduled Tokens'),
+        createLink('link5', 'Follow'),
+        createLink('link3', 'Login'),
+        createLink('link4', 'Join the Community'),
+    ];
 
-// Agregar el menú flotante al body
-document.body.appendChild(floatingMenu);
+    // Agregar enlaces al contenedor <ul>
+    links.forEach(link => ulContainer.appendChild(link));
+
+    // Agregar el contenedor <ul> al menú flotante
+    floatingMenu.appendChild(ulContainer);
+
+    // Agregar el menú flotante al body
+    document.body.appendChild(floatingMenu);
+
+    function showSearchPopup() {
+        const popupContainer = document.createElement('div');
+        const closeButton = document.createElement('button');
+        const closeIcon = document.createTextNode('❌');
+        const inputElement = document.createElement('input');
+        const searchButton = document.createElement('button');
+        const searchHistoryContainer = document.createElement('div'); // Contenedor para la lista con scroll
+        const searchHistoryList = document.createElement('ul');
+
+        popupContainer.style.position = 'fixed';
+        popupContainer.style.top = '50%';
+        popupContainer.style.left = '50%';
+        popupContainer.style.transform = 'translate(-50%, -50%)';
+        popupContainer.style.padding = '40px';
+        popupContainer.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+        popupContainer.style.boxShadow = '0 0 20px rgba(0, 0, 0, 0.8)';
+        popupContainer.style.borderRadius = '10px';
+        popupContainer.style.zIndex = '9999';
+        popupContainer.style.textAlign = 'center';
+
+        closeButton.style.position = 'absolute';
+        closeButton.style.top = '10px';
+        closeButton.style.right = '10px';
+        closeButton.style.background = 'none';
+        closeButton.style.border = 'none';
+        closeButton.style.cursor = 'pointer';
+        closeButton.style.fontSize = '24px';
+        closeButton.style.color = 'white';
+        closeButton.appendChild(closeIcon);
+
+        inputElement.type = 'text';
+        inputElement.placeholder = 'Model Name';
+        inputElement.style.margin = '10px 0';
+        inputElement.style.padding = '15px';
+        inputElement.style.width = '85%';
+        inputElement.style.border = '1px solid #8e8e8e';
+        inputElement.style.borderRadius = '5px';
+        inputElement.required = true;
+        inputElement.minLength = 3;
+        inputElement.autocomplete = 'off';
+
+        searchButton.textContent = 'Search';
+        searchButton.style.marginTop = '10px';
+        searchButton.style.padding = '15px';
+        searchButton.style.width = '100%';
+        searchButton.style.backgroundColor = 'black';
+        searchButton.style.color = 'white';
+        searchButton.style.border = 'none';
+        searchButton.style.borderRadius = '5px';
+        searchButton.style.cursor = 'pointer';
+        searchButton.style.marginBottom = '12px';
+
+        searchHistoryContainer.style.maxHeight = '260px'; // Altura máxima antes de activar el scroll
+        searchHistoryContainer.style.overflowY = 'auto'; // Añadir scroll si es necesario
+
+        searchHistoryList.style.listStyle = 'none';
+        searchHistoryList.style.padding = '0';
+        searchHistoryList.style.marginTop = '0'; // Reducir el margen superior para un mejor aspecto
+
+        const searchHistory = JSON.parse(localStorage.getItem('searchHistory')) || [];
+
+        searchHistory.forEach(historyItem => {
+            const historyItemElement = document.createElement('li');
+            const deleteButton = document.createElement('button');
+            const deleteIcon = document.createTextNode('✖️');
+
+            historyItemElement.textContent = historyItem;
+            historyItemElement.style.cursor = 'pointer';
+            historyItemElement.style.padding = '2px';
+            historyItemElement.style.margin = '2px';
+            historyItemElement.style.fontWeight = 'bold';
+            historyItemElement.style.color = 'white';
+
+            deleteButton.style.background = 'none';
+            deleteButton.style.border = 'none';
+            deleteButton.style.cursor = 'pointer';
+            deleteButton.style.fontSize = '16px';
+            deleteButton.style.color = 'red';
+            deleteButton.appendChild(deleteIcon);
+
+            historyItemElement.appendChild(deleteButton);
+            searchHistoryList.appendChild(historyItemElement);
+
+            deleteButton.addEventListener('click', (event) => {
+                event.stopPropagation();
+                // Eliminar el registro del historial y actualizar el almacenamiento local
+                searchHistory.splice(searchHistory.indexOf(historyItem), 1);
+                localStorage.setItem('searchHistory', JSON.stringify(searchHistory));
+
+                // Eliminar el elemento del DOM
+                searchHistoryList.removeChild(historyItemElement);
+            });
+
+            historyItemElement.addEventListener('click', () => {
+                inputElement.value = historyItem;
+                searchButton.click();
+            });
+        });
+
+        popupContainer.appendChild(closeButton);
+        popupContainer.appendChild(inputElement);
+        popupContainer.appendChild(searchButton);
+        searchHistoryContainer.appendChild(searchHistoryList); // Agregar lista al contenedor
+        popupContainer.appendChild(searchHistoryContainer); // Agregar contenedor al popup
+
+        document.body.appendChild(popupContainer);
+        inputElement.focus();
+
+        closeButton.addEventListener('click', () => {
+            document.body.removeChild(popupContainer);
+        });
+
+        searchButton.addEventListener('click', performSearch);
+
+        // Permitir la búsqueda al presionar Enter en el campo de entrada
+        inputElement.addEventListener('keyup', (event) => {
+            if (event.key === 'Enter') {
+                performSearch();
+            }
+        });
+
+        function performSearch() {
+            const modelName = inputElement.value.trim();
+
+            if (inputElement.checkValidity() && modelName.length >= 3) {
+                const currentDomain = window.location.origin;
+                const urlToRedirect = new URL(modelName, currentDomain).href;
+                window.location.href = urlToRedirect;
+
+                searchHistory.unshift(modelName);
+
+                localStorage.setItem('searchHistory', JSON.stringify(searchHistory));
+                document.body.removeChild(popupContainer);
+            } else {
+                alert('Please enter a valid model name (at least 3 characters).');
+            }
+        }
+    }
+
+    const searchLink = document.getElementById('link1');
+    if (searchLink) {
+        searchLink.addEventListener('click', showSearchPopup);
+    }
+
 
 });
