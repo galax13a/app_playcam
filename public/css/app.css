@@ -1070,3 +1070,6 @@ li::before {
 li:hover {
     background-color: #bcf3623f;
 }
+.text-red{
+    color: #be1338;
+}

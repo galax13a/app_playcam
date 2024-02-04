@@ -5,13 +5,13 @@ const express = require('express');
 const path = require('path');
 const routes = require('./routes');
 const { createMainWindow, createWinTraductor, createModeratorCamWindow } = require('./windows'); // Importa el nuevo módulo
-const { Notification } = require('electron');
 const cors = require('cors');
+
 
 let Reload = false;
 let expressApp;
-let devtools = true; //open toolsDev
-let MainWinApp;
+let devtools = false; //open toolsDev
+let MainWinApp, WinPLayRecord;
 let CopyTraductor = null; 
 const PORT = process.env.PORT || 3069;
 let Win_Youtube;
@@ -75,22 +75,48 @@ app.whenReady().then(async () => {
     });
   });
 
+  
+
+  ipcMain.on('open-voice-rec-window', () => { //win Moderator..
+
+    console.log('voice-rec ');
+    WinPLayRecord = new BrowserWindow({
+      width: 960,
+      height: 700,
+      icon: path.join(__dirname, 'public', 'images', 'youtube.png'), // Ruta al archivo de icono
+    });
+
+    WinPLayRecord.loadURL(`http://localhost:${PORT}/app/traductor/audio`);
+    WinPLayRecord.setMenu(null);
+    if (devtools) {
+      WinPLayRecord.webContents.openDevTools();
+    }
+
+    WinPLayRecord.on('closed', () => {
+      // Establecer la variable 'win' a null cuando la ventana se cierre
+      WinPLayRecord = null;
+    });  
+
+});
+
   ipcMain.on('open-youtube-window', () => { //win Moderator..
-   
+
     console.log('Canal youtube');
     Win_Youtube = new BrowserWindow({
       width: 960,
       height: 700,
       icon: path.join(__dirname, 'public', 'images', 'youtube.png'), // Ruta al archivo de icono
-  });
-  
-  Win_Youtube.loadURL(`http://localhost:${PORT}/app/youtube`);
-  Win_Youtube.setMenu(null);
+    });
 
-  Win_Youtube.on('closed', () => {
-    // Establecer la variable 'win' a null cuando la ventana se cierre
-    Win_Youtube = null;
-  });
+    Win_Youtube.loadURL(`http://localhost:${PORT}/app/youtube`);
+    Win_Youtube.setMenu(null);
+    if (devtools) {
+      Win_Youtube.webContents.openDevTools();
+    }
+
+    Win_Youtube.on('closed', () => {
+      Win_Youtube = null;
+    });
 
   });
 
@@ -119,5 +145,5 @@ app.on('activate', function () {
 });
 
 app.on("ready", function () {
-  new Notification({ title: 'Test Notification', body: 'This is a test notification' }).show();
+ 
 });

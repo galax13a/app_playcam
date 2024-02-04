@@ -93,18 +93,17 @@ router.get('/app/youtube', (req, res) => {
 });
 
 /*
-
 router.get('/app/youtube', (req, res) => {
   try {
-    const folderPath = path.join(__dirname, 'public', 'audios', 'youtube');
-    if (!fs.existsSync(folderPath)) {
+  //  const folderPath = path.join(__dirname, 'public', 'audios', 'youtube');
+    if (!fs.existsSync(audiosDirectory)) {
         res.render('youtube/youtube', { audioFiles: [] });
         return;
     }
 
-    const audioFiles = fs.readdirSync(folderPath)
+    const audioFiles = fs.readdirSync(audiosDirectory)
       .map((file) => {
-        const filePath = path.join(folderPath, file);
+        const filePath = path.join(audiosDirectory, file);
         const stats = fs.statSync(filePath);
         return {
           name: file,
@@ -117,9 +116,11 @@ router.get('/app/youtube', (req, res) => {
     res.render('youtube/youtube', { audioFiles });
   } catch (error) {
     console.error(error);
-    res.status(500).send('Error reading audio files');
+   // res.status(500).send('Error reading audio files');
+   
   }
 });
+
 */
 router.post('/app/youtube/download', async (req, res) => {
   const { videoUrl } = req.body;
@@ -162,12 +163,14 @@ router.post('/app/youtube/download', async (req, res) => {
   }
 });
 
+
 router.get('/app/youtube/play/:audio', (req, res) => {
   const audioFile = req.params.audio;
   const filePath = path.join(audiosDirectory, audioFile);
   const stat = fs.statSync(filePath);
   const fileSize = stat.size;
   const range = req.headers.range;
+  try {
 
   if (range) {
       const parts = range.replace(/bytes=/, "").split("-");
@@ -194,6 +197,11 @@ router.get('/app/youtube/play/:audio', (req, res) => {
       res.writeHead(200, head);
       fs.createReadStream(filePath).pipe(res);
   }
+}catch (error) {
+  
+  res.status(500).send(`no file found audio` );
+  //res.redirect('/app/youtube');
+}
 });
 
 router.get('/app/youtube/delete/:audio', (req, res) => {
@@ -208,9 +216,14 @@ router.get('/app/youtube/delete/:audio', (req, res) => {
 
     res.redirect('/app/youtube');
   } catch (error) {
+    if (error.code === 'EPERM') {
+      res.status(500).send(`the file may have already been deleted <br> <a href="/app/youtube">Go back to Youtube Play </a>` );
+    }
     console.error(error);
-    res.status(500).send(`Error during deletion.<br> or the file may have already been deleted <br> <a href="/app/youtube">Go back to Youtube Play </a> Error /  ${error}` );
+    //res.status(500).send(`Error during deletion.<br> or the file may have already been deleted <br> <a href="/app/youtube">Go back to Youtube Play </a>` );
+    res.redirect('/app/youtube');
   }
+
 });
 
 

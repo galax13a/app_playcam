@@ -2,6 +2,8 @@
 
 const { BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
+const fs = require('fs');
+const { app } = require('electron');
 
 let mainWindow, Win_traductor, Win_moderator;
 let Win_traductorVisible = false, Win_moderatorVisible = false;
@@ -122,7 +124,7 @@ async function createWinTraductor(config) {
 
 async function createModeratorCamWindow(config) {
   const { url, icon, devtools, preloader } = config;
-console.log(`createModeratorCamWindow : ${Win_moderatorVisible}`);
+
   if (!Win_moderatorVisible) {
     Win_moderator = new BrowserWindow({
       width: 800,
@@ -138,9 +140,15 @@ console.log(`createModeratorCamWindow : ${Win_moderatorVisible}`);
     if (devtools) {
       Win_moderator.webContents.openDevTools();
     }
+        Win_moderator.webContents.on('did-finish-load', () => {
+              console.log('finsh win moderator');
+        });
 
+    Win_moderator.setMenu(null);
     await Win_moderator.loadURL(url);
+    Win_moderator.maximize();    
 
+   
     Win_moderator.on('closed', () => {
       Win_moderatorVisible = false;
       Win_moderator = null;

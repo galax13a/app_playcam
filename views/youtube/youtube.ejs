@@ -20,7 +20,7 @@
             background-color: #fff;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            margin-top: 50px;
+            margin-top: 10px;
         }
 
         h1, h2 {
@@ -127,6 +127,12 @@
             z-index: 2; /* Añadido */
         }
 
+        li p#name {
+            white-space: pre-line;
+            word-wrap: break-word;
+        }
+        
+
     </style>
 </head>
 <body>
@@ -143,7 +149,8 @@
                 <a href="#" onclick="pasteFromClipboard()">Paste from Clipboard</a>
                 |     <a href="#" onclick="refreshPage()">Refresh</a>
             </label>
-            <input type="text" class="input" id="videoUrl" name="videoUrl" required>
+            <input type="text" class="input" id="videoUrl" name="videoUrl" required pattern=".{30,}">
+
             <button type="submit" class="button-pink"  id="downloadButton">Download Audio</button>
         </form>
 
@@ -152,12 +159,13 @@
             <ul>
                 <% audioFiles.forEach(audio => { %>
                     <li>
+                        <p id="name"><%= audio %></p>
                         <audio controls>
                             <source src="/app/youtube/play/<%= encodeURIComponent(audio) %>" type="audio/mpeg">
                             Your browser does not support the audio element.
                         </audio>
-                        <%= audio %>
-                        <a href="/app/youtube/delete/<%= encodeURIComponent(audio) %>">Delete</a>
+                    
+                        <a id="delete" href="/app/youtube/delete/<%= encodeURIComponent(audio) %>">Delete</a>
                     </li>
                 <% }); %>
             </ul>
@@ -167,15 +175,12 @@
     </div>
 
     <script>
-        document.getElementById('downloadButton').addEventListener('click', function() {    
-            document.getElementById('loading-indicator').style.display = 'block';
-        });
+
+
         async function pasteFromClipboard() {
             try {
-                // Obtener el contenido del portapapeles
+                
                 const clipboardContent = await navigator.clipboard.readText();
-
-                // Establecer el contenido en el campo de entrada
                 document.getElementById('videoUrl').value = clipboardContent;
             } catch (error) {
                 console.error('Error al leer el portapapeles:', error);
@@ -186,7 +191,9 @@
             // Recargar la página
             location.reload();
         }
-    </script>
+
+ 
+          </script>
 
 </body>
 </html>
