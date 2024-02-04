@@ -1,6 +1,6 @@
 const { ipcRenderer, remote } = require('electron');
 console.log('Running Moderator v1.1');
-
+let domain = "https://chaturbate.com";
 setTimeout(() => {
     hideOverlay();
     document.body.style.display = 'block'; // Mostrar el cuerpo después de ocultar el overlay
@@ -56,6 +56,8 @@ document.addEventListener('DOMContentLoaded', function () {
     border: 3px solid #0d1c19;
   }
 `;
+    let modeChatToggle;
+    modeChatToggle = localStorage.getItem('modeChatToggle');
 
     const styleElement = document.createElement('style');
     styleElement.type = 'text/css';
@@ -205,13 +207,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Crear enlaces
     const links = [
-        createLink('link0', 'Playcam', 'https://en.chaturbate.com'),
-        createLink('link1', 'Search'),
-        createLink('link6', 'Mode Chat'),
-        createLink('link2', 'Send Scheduled Tokens'),
-        createLink('link5', 'Follow'),
-        createLink('link3', 'Login'),
-        createLink('link4', 'Join the Community'),
+        createLink('link0', '😎 Playcam', 'https://en.chaturbate.com'),
+        createLink('link1', '🔎 Search'),
+        createLink('link6', '🗯 Mode Chat'),
+        createLink('link-send-tokens', '🔔 Send Tokens'),
+        createLink('link-follow', '💚 Follow'),
+        createLink('link-cams', '🧿 Cams'),
+        createLink('link-login', '🔒Login'),
+
     ];
 
     // Agregar enlaces al contenedor <ul>
@@ -311,14 +314,19 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Eliminar el registro del historial y actualizar el almacenamiento local
                 searchHistory.splice(searchHistory.indexOf(historyItem), 1);
                 localStorage.setItem('searchHistory', JSON.stringify(searchHistory));
-
                 // Eliminar el elemento del DOM
                 searchHistoryList.removeChild(historyItemElement);
             });
 
             historyItemElement.addEventListener('click', () => {
                 inputElement.value = historyItem;
+                const currentDomain = window.location.origin;
+                const urlToRedirect = new URL(historyItem, currentDomain).href;
+                window.location.href = urlToRedirect;
+                /*
                 searchButton.click();
+                console.log('historyItem');
+                */
             });
         });
 
@@ -367,116 +375,141 @@ document.addEventListener('DOMContentLoaded', function () {
         searchLink.addEventListener('click', showSearchPopup);
     }
 
-
     // modochat
- // Función para ocultar elementos
-function hideElements() {
-    const navbar = document.querySelector("#header > div.nav-bar");
-    const genderTabs = document.querySelector("#main > div > div.genderTabs.bgColor.navigationAlt2BgImage.navigationAlt2BgColor.tabSectionBorder.top-section");
-    const roomTabs = document.querySelector("#roomTabs");
-    const chat = document.querySelector("#ChatTabContainer");
+    // Función para ocultar elementos
+    function hideElements() {
+        const navbar = document.querySelector("#header > div.nav-bar");
+        const genderTabs = document.querySelector("#main > div > div.genderTabs.bgColor.navigationAlt2BgImage.navigationAlt2BgColor.tabSectionBorder.top-section");
+        const roomTabs = document.querySelector("#roomTabs");
+        const chat = document.querySelector("#ChatTabContainer");
 
-    if (navbar) {
-        navbar.style.display = 'none';
-    }
-    if (genderTabs) {
-        genderTabs.style.display = 'none';
-    }
-    if (roomTabs) {
-        roomTabs.style.display = 'none';
-    }
-    if (chat) {
-        chat.style.display = 'none';
-    }
-}
-
-// Función para mostrar elementos
-function showElements() {
-    const navbar = document.querySelector("#header > div.nav-bar");
-    const genderTabs = document.querySelector("#main > div > div.genderTabs.bgColor.navigationAlt2BgImage.navigationAlt2BgColor.tabSectionBorder.top-section");
-    const roomTabs = document.querySelector("#roomTabs");
-    const chat = document.querySelector("#ChatTabContainer");
-
-    if (navbar) {
-        navbar.style.display = 'block';
-    }
-    if (genderTabs) {
-        genderTabs.style.display = 'block';
-    }
-    if (roomTabs) {
-        roomTabs.style.display = 'block';
-    }    
-    if (chat) {
-        chat.style.display = 'block';
-    }
-}
-
-// Función para manejar el modo chat toggle
-function toggleModeChat() {
-    const modeChatToggle = localStorage.getItem('modeChatToggle');
-
-    if (modeChatToggle === 'true') {
-        hideElements();
-    } else {
-        showElements();
-    }
-}
-
-toggleModeChat();
-
-const modeChatLink = document.getElementById('link6');
-if (modeChatLink) {
-    modeChatLink.addEventListener('click', function (event) {
-        const activeModelElement = document.querySelector("#main > div > div.genderTabs.bgColor.navigationAlt2BgImage.navigationAlt2BgColor.tabSectionBorder.top-section > div > div > a.gender-tab.tabElement.active.tabBorder.activeRoom.tabElementLink");
-
-        if (activeModelElement) {
-            // Aquí puedes agregar la lógica para activar el modo chat
-           // alert("Modo chat activado");
-           createNotification('Mode Chat Active');
-           document.querySelector("#video-mode").click();
-        } else {
-           // alert("To be in chat mode, you must be seeing a model.");
-            createNotification('To be in chat mode, you must be seeing a model.');
-            event.preventDefault(); // Prevenir la acción por defecto del enlace
+        if (navbar) {
+            navbar.style.display = 'none';
         }
+        if (genderTabs) {
+            genderTabs.style.display = 'none';
+        }
+        if (roomTabs) {
+            roomTabs.style.display = 'none';
+        }
+        if (chat) {
+            chat.style.display = 'none';
+        }
+    }
 
-        // Cambiar el estado del modo chat toggle en el Local Storage
-        const modeChatToggle = localStorage.getItem('modeChatToggle');
+    // Función para mostrar elementos
+    function showElements() {
+        const navbar = document.querySelector("#header > div.nav-bar");
+        const genderTabs = document.querySelector("#main > div > div.genderTabs.bgColor.navigationAlt2BgImage.navigationAlt2BgColor.tabSectionBorder.top-section");
+        const roomTabs = document.querySelector("#roomTabs");
+        const chat = document.querySelector("#ChatTabContainer");
+
+        if (navbar) {
+            navbar.style.display = 'block';
+        }
+        if (genderTabs) {
+            genderTabs.style.display = 'block';
+        }
+        if (roomTabs) {
+            roomTabs.style.display = 'block';
+        }
+        if (chat) {
+            chat.style.display = 'block';
+        }
+    }
+
+    // Función para manejar el modo chat toggle
+    function toggleModeChat() {
+        let videomode = document.querySelector("#video-mode");
+        if (videomode) { videomode.click(); }
+
         if (modeChatToggle === 'true') {
-            localStorage.setItem('modeChatToggle', 'false');
+            hideElements();
         } else {
-            localStorage.setItem('modeChatToggle', 'true');
+            showElements();
+        }
+    }
+
+    toggleModeChat();
+
+    const modeChatLink = document.getElementById('link6');
+
+    if (modeChatLink) {
+
+        modeChatLink.addEventListener('click', function (event) {
+            const activeModelElement = document.querySelector("#main > div > div.genderTabs.bgColor.navigationAlt2BgImage.navigationAlt2BgColor.tabSectionBorder.top-section > div > div > a.gender-tab.tabElement.active.tabBorder.activeRoom.tabElementLink");
+
+            if (activeModelElement) {
+                modeChatToggle = localStorage.getItem('modeChatToggle');
+                if (modeChatToggle === 'true') {
+                    createNotification('Mode Chat Active');
+
+                } else {
+                    createNotification('Mode Chat Disabled', 'red');
+                }
+
+            } else {
+                createNotification('To be in chat mode, you must be seeing a model.');
+                event.preventDefault();
+            }
+
+            if (modeChatToggle === 'true') {
+                localStorage.setItem('modeChatToggle', 'false');
+            } else {
+                localStorage.setItem('modeChatToggle', 'true');
+            }
+            toggleModeChat();
+        });
+    }
+
+    function createNotification(message, fondo = null) {
+        const notificationDiv = document.createElement('div');
+        notificationDiv.style.position = 'fixed';
+        notificationDiv.style.top = '50%';
+        notificationDiv.style.left = '50%';
+        notificationDiv.style.transform = 'translate(-50%, -50%)';
+        notificationDiv.style.padding = '15px';
+        notificationDiv.style.backgroundColor = '#333';
+        notificationDiv.style.color = 'white';
+        notificationDiv.style.borderRadius = '8px';
+        notificationDiv.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.5)';
+        notificationDiv.style.zIndex = '9999';
+        notificationDiv.textContent = message;
+
+        document.body.appendChild(notificationDiv);
+        if (fondo) {
+            notificationDiv.style.backgroundColor = fondo;
+        } else {
+            notificationDiv.style.backgroundColor = '#333'; // Fondo predeterminado
         }
 
-        // Alternar la visibilidad de los elementos
-        toggleModeChat();
+        // Desvanecer después de 3 segundos
+        setTimeout(() => {
+            document.body.removeChild(notificationDiv);
+        }, 3000);
+    }
+
+});
+
+
+function GetRoomVisit() {
+    document.addEventListener('DOMContentLoaded', function () {
+        
+        if (window.location.origin === domain) {
+        
+            const pathAfterDomain = window.location.pathname.substring(1).trim();
+            const currentDate = new Date().toISOString().split('T')[0];
+            let storedURLsByDate = JSON.parse(localStorage.getItem('RomModelVisitURLsByDate')) || {};
+            let currentURLs = storedURLsByDate[currentDate] || [];
+            if (pathAfterDomain !== '' && !currentURLs.includes(pathAfterDomain)) {
+                currentURLs.unshift(pathAfterDomain);           
+                storedURLsByDate[currentDate] = currentURLs;              
+                localStorage.setItem('RomModelVisitURLsByDate', JSON.stringify(storedURLsByDate));
+            }
+        }
     });
 }
 
-function createNotification(message) {
-    const notificationDiv = document.createElement('div');
-    notificationDiv.style.position = 'fixed';
-    notificationDiv.style.top = '50%';
-    notificationDiv.style.left = '50%';
-    notificationDiv.style.transform = 'translate(-50%, -50%)';
-    notificationDiv.style.padding = '15px';
-    notificationDiv.style.backgroundColor = '#333';
-    notificationDiv.style.color = 'white';
-    notificationDiv.style.borderRadius = '8px';
-    notificationDiv.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.5)';
-    notificationDiv.style.zIndex = '9999';
-    notificationDiv.textContent = message;
+// Llamar a la función
+GetRoomVisit();
 
-    document.body.appendChild(notificationDiv);
-
-    // Desvanecer después de 3 segundos
-    setTimeout(() => {
-        document.body.removeChild(notificationDiv);
-    }, 3000);
-}
-
-// Ejemplo de uso
-createNotification('Esta es una notificación de ejemplo.');
-
-
-});
