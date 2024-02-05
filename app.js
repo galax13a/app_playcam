@@ -70,7 +70,7 @@ app.whenReady().then(async () => {
     const moderatorCamWindow = createModeratorCamWindow({
       url: 'https://en.chaturbate.com/',
       icon: 'public/images/moderator.png',
-      devtools: true,
+      devtools: devtools,
       preloader: './views/moderator/preload-moderator.js'
     });
   });

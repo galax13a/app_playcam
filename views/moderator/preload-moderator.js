@@ -209,10 +209,11 @@ document.addEventListener('DOMContentLoaded', function () {
     const links = [
         createLink('link0', '😎 Playcam', 'https://en.chaturbate.com'),
         createLink('link1', '🔎 Search'),
-        createLink('link6', '🗯 Mode Chat'),
-        createLink('link-send-tokens', '🔔 Send Tokens'),
+        createLink('link6', '💭 Mode Chat'),
+        createLink('link-send-tokens', '🔔Auto Tips'),
+        createLink('link-chat-rec-room', '🔴 Rec Tokens'),
         createLink('link-follow', '💚 Follow'),
-        createLink('link-cams', '🧿 Cams'),
+        createLink('link-camx', '🧿 Cams'),
         createLink('link-login', '🔒Login'),
 
     ];
@@ -440,6 +441,11 @@ document.addEventListener('DOMContentLoaded', function () {
             const activeModelElement = document.querySelector("#main > div > div.genderTabs.bgColor.navigationAlt2BgImage.navigationAlt2BgColor.tabSectionBorder.top-section > div > div > a.gender-tab.tabElement.active.tabBorder.activeRoom.tabElementLink");
 
             if (activeModelElement) {
+                if (modeChatToggle === 'true') {
+                    localStorage.setItem('modeChatToggle', 'false');
+                } else {
+                    localStorage.setItem('modeChatToggle', 'true');
+                }
                 modeChatToggle = localStorage.getItem('modeChatToggle');
                 if (modeChatToggle === 'true') {
                     createNotification('Mode Chat Active');
@@ -453,11 +459,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 event.preventDefault();
             }
 
-            if (modeChatToggle === 'true') {
-                localStorage.setItem('modeChatToggle', 'false');
-            } else {
-                localStorage.setItem('modeChatToggle', 'true');
-            }
             toggleModeChat();
         });
     }
@@ -489,21 +490,312 @@ document.addEventListener('DOMContentLoaded', function () {
         }, 3000);
     }
 
+
+    // cams btn
+
+    function showPopup_cams() {
+        const popupContainer = document.createElement('div');
+        const closeButton = document.createElement('button');
+        const closeIcon = document.createTextNode('❌');
+        const popupContent = document.createElement('div');
+
+        popupContainer.style.position = 'fixed';
+        popupContainer.style.top = '50%';
+        popupContainer.style.left = '50%';
+        popupContainer.style.transform = 'translate(-50%, -50%)';
+        popupContainer.style.padding = '40px';
+        popupContainer.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+        popupContainer.style.boxShadow = '0 0 20px rgba(0, 0, 0, 0.8)';
+        popupContainer.style.borderRadius = '10px';
+        popupContainer.style.zIndex = '9999';
+        popupContainer.style.textAlign = 'center';
+
+        closeButton.style.position = 'absolute';
+        closeButton.style.top = '10px';
+        closeButton.style.right = '10px';
+        closeButton.style.background = 'none';
+        closeButton.style.border = 'none';
+        closeButton.style.cursor = 'pointer';
+        closeButton.style.fontSize = '24px';
+        closeButton.style.color = 'white';
+
+
+        closeButton.appendChild(closeIcon);
+
+        popupContent.style.maxHeight = '260px'; // Altura máxima antes de activar el scroll
+        popupContent.style.minWidth = '460px';
+        popupContent.style.overflowY = 'auto'; // Añadir scroll si es necesario
+
+        // Recuperar el objeto de URLs agrupadas por fecha guardado en el almacenamiento local
+        const storedURLsByDate = JSON.parse(localStorage.getItem('RomModelVisitURLsByDate')) || {};
+
+        for (const date in storedURLsByDate) {
+            if (storedURLsByDate.hasOwnProperty(date)) {
+                const urlsForDate = storedURLsByDate[date];
+
+                const detailsElement = document.createElement('details');
+                const summaryElement = document.createElement('summary');
+                const deleteButton = document.createElement('button');
+                const deleteIcon = document.createTextNode('✖️ Delete Day');
+                const urlList = document.createElement('ul');
+
+                //detailsElement.style.margin = '10px 0';
+                detailsElement.style.border = '1px solid #8e8e8e';
+                detailsElement.style.borderRadius = '5px';
+                detailsElement.style.cursor = 'pointer';
+                detailsElement.style.padding = '12px';
+                detailsElement.style.margin = '10px';
+                detailsElement.style.fontSize = '26px';
+
+                summaryElement.textContent = date;
+                summaryElement.style.fontWeight = 'bold';
+
+                deleteButton.style.background = 'none';
+                deleteButton.style.border = 'none';
+                deleteButton.style.cursor = 'pointer';
+                deleteButton.style.fontSize = '16px';
+                deleteButton.style.color = 'red';
+                deleteButton.style.marginTop = '12px';
+                deleteButton.style.padding = '4px';
+                deleteButton.title = 'Delete';
+
+                deleteButton.appendChild(deleteIcon);
+                detailsElement.appendChild(summaryElement);
+
+                detailsElement.appendChild(urlList);
+                detailsElement.appendChild(deleteButton);
+
+                if (date === getCurrentDate()) {
+                    detailsElement.setAttribute('open', ''); // Agregar 'open' solo si es la fecha actual
+                }
+
+                urlsForDate.forEach(url => {
+                    const listItem = document.createElement('li');
+                    //listItem.textContent = url;
+                    const trimmedUrl = url.replace(/\/$/, "");
+                    listItem.textContent = trimmedUrl;
+
+                    listItem.style.margin = '4px';
+                    listItem.style.padding = '6px';
+                    listItem.style.backgroundColor = "rgba(255, 255, 0, 0.5)";
+                    listItem.style.borderRadius = "12px";
+                    listItem.style.boxShadow = "0 0 10px rgba(0, 0, 0, 0.5)";
+
+                    listItem.addEventListener('click', () => {
+                        // Redirigir al hacer clic en un elemento de la lista
+                        const currentDomain = window.location.origin;
+                        const urlToRedirect = new URL(url, currentDomain).href;
+                        window.location.href = urlToRedirect;
+                    });
+
+                    urlList.appendChild(listItem);
+                });
+
+                deleteButton.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    // Eliminar URLs para la fecha correspondiente y actualizar el almacenamiento local
+                    delete storedURLsByDate[date];
+                    localStorage.setItem('RomModelVisitURLsByDate', JSON.stringify(storedURLsByDate));
+                    // Eliminar el elemento del DOM
+                    popupContent.removeChild(detailsElement);
+                });
+
+                popupContent.appendChild(detailsElement);
+            }
+        }
+
+        popupContainer.appendChild(closeButton);
+        popupContainer.appendChild(popupContent);
+
+        document.body.appendChild(popupContainer);
+
+        closeButton.addEventListener('click', () => {
+            document.body.removeChild(popupContainer);
+        });
+
+        function getCurrentDate() {
+            const currentDate = new Date();
+            const year = currentDate.getFullYear();
+            const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
+            const day = currentDate.getDate().toString().padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+    }
+
+    // Cambiar el selector a #link-cams
+    const linkCams = document.querySelector("#link-camx");
+
+    if (linkCams) {
+        linkCams.addEventListener('click', showPopup_cams);
+    } else {
+        console.error("Elemento #link-cams no encontrado");
+    }
+
+    // activar modo CHAT
+
+    function ShowNavChatRoom() {
+
+
+        // disparar follow
+        const linkCamsButton = document.querySelector("#link-camx");
+        const followButton = document.querySelector("#roomTabs > div.tabBar > div:nth-child(1) > div.followButton");
+        /*
+        if (linkCamsButton && followButton) {       
+            linkCamsButton.addEventListener('click', function () {
+                followButton.click();
+            });
+        }
+        */
+
+        // Obtener el elemento del enlace de chat activo
+        const chatRoomLink = document.querySelector("#TheaterModeRoomContents");
+        const link6 = document.querySelector("#link6");
+        const linkSendTokens = document.querySelector("#link-send-tokens");
+        const linkChatRecRoom = document.querySelector("#link-chat-rec-room");
+        const linkFollow = document.querySelector("#link-follow");
+        // Verificar si el elemento del enlace de chat activo existe
+        if (chatRoomLink) {
+            link6.style.display = 'block';
+            linkSendTokens.style.display = 'block';
+            linkChatRecRoom.style.display = 'block';
+            linkFollow.style.display = 'block';
+
+        } else {
+            link6.style.display = 'none';
+            linkSendTokens.style.display = 'none';
+            linkChatRecRoom.style.display = 'none';
+            linkFollow.style.display = 'none';
+        }
+    }
+
+    setTimeout(function () {
+        ShowNavChatRoom();
+    }, 333);
+
+    // follows 
+// Agregar nuevo follow al hacer clic en #link-follow
+// Agregar nuevo follow al hacer clic en #link-follow
+const linkFollow = document.querySelector("#link-follow");
+if (linkFollow) {
+    linkFollow.addEventListener('click', () => {
+        const currentDomain = window.location.pathname.split('/')[1];
+        const followsList = JSON.parse(localStorage.getItem('playcamFollows')) || [];
+
+        if (!followsList.includes(currentDomain)) {
+            followsList.push(currentDomain);
+            localStorage.setItem('playcamFollows', JSON.stringify(followsList));
+            console.log("Nuevo follow agregado:", currentDomain);
+        } else {
+            console.log("El follow ya existe en la lista:", currentDomain);
+        }
+        
+        // Mostrar popup de follows en orden inverso
+        showPopupFollows(followsList.reverse());
+    });
+} else {
+    console.error("Elemento #link-follow no encontrado");
+}
+
+function showPopupFollows(followsList) {
+    const popupContainer = document.createElement('div');
+    const closeButton = document.createElement('button');
+    const closeIcon = document.createTextNode('❌');
+    const popupContent = document.createElement('div');
+
+    popupContainer.style.position = 'fixed';
+    popupContainer.style.top = '50%';
+    popupContainer.style.left = '50%';
+    popupContainer.style.transform = 'translate(-50%, -50%)';
+    popupContainer.style.padding = '40px';
+    popupContainer.style.backgroundColor = 'rgba(0, 255, 0, 0.5)'; // Cambiado a verde
+    popupContainer.style.boxShadow = '0 0 20px rgba(0, 0, 0, 0.8)';
+    popupContainer.style.borderRadius = '10px';
+    popupContainer.style.zIndex = '9999';
+    popupContainer.style.textAlign = 'center';
+
+    closeButton.style.position = 'absolute';
+    closeButton.style.top = '10px';
+    closeButton.style.right = '10px';
+    closeButton.style.background = 'none';
+    closeButton.style.border = 'none';
+    closeButton.style.cursor = 'pointer';
+    closeButton.style.fontSize = '24px';
+    closeButton.style.color = 'white';
+    closeButton.appendChild(closeIcon);
+
+    popupContent.style.maxHeight = '260px';
+    popupContent.style.minWidth = '460px';
+    popupContent.style.overflowY = 'auto';
+
+    followsList.forEach(follow => {
+        const listItem = document.createElement('div');
+        listItem.textContent = follow;
+        listItem.style.margin = '10px 0';
+        listItem.style.fontSize = '18px';
+        listItem.style.backgroundColor = "rgba(0, 255, 0, 0.5)"; // Cambiado a verde
+        listItem.style.borderRadius = "12px";
+        listItem.style.boxShadow = "0 0 10px rgba(0, 0, 0, 0.5)";
+        listItem.style.color = 'white';
+        listItem.style.padding = "4px";
+        listItem.style.cursor = "pointer";
+
+        const deleteButton = document.createElement('button');
+        const deleteIcon = document.createTextNode('✖️');
+        deleteButton.style.background = 'none';
+        deleteButton.style.border = 'none';
+        deleteButton.style.cursor = 'pointer';
+        deleteButton.style.fontSize = '16px';
+        deleteButton.style.color = 'red';
+        deleteButton.style.marginLeft = '6px';
+
+        deleteButton.appendChild(deleteIcon);
+        listItem.appendChild(deleteButton);
+
+        listItem.addEventListener('click', () => {
+            const currentDomain = window.location.origin;
+            const urlToRedirect = new URL(follow, currentDomain).href;
+            window.location.href = urlToRedirect;
+        });
+
+        deleteButton.addEventListener('click', (event) => {
+            event.stopPropagation();
+            // Eliminar el follow del almacenamiento y actualizar el listado
+            followsList.splice(followsList.indexOf(follow), 1);
+            localStorage.setItem('playcamFollows', JSON.stringify(followsList));
+            // Eliminar el elemento del DOM
+            popupContent.removeChild(listItem);
+        });
+
+        popupContent.appendChild(listItem);
+    });
+
+    popupContainer.appendChild(closeButton);
+    popupContainer.appendChild(popupContent);
+
+    document.body.appendChild(popupContainer);
+
+    closeButton.addEventListener('click', () => {
+        document.body.removeChild(popupContainer);
+    });
+}
+
+
+
 });
 
 
 function GetRoomVisit() {
     document.addEventListener('DOMContentLoaded', function () {
-        
+
         if (window.location.origin === domain) {
-        
+
             const pathAfterDomain = window.location.pathname.substring(1).trim();
             const currentDate = new Date().toISOString().split('T')[0];
             let storedURLsByDate = JSON.parse(localStorage.getItem('RomModelVisitURLsByDate')) || {};
             let currentURLs = storedURLsByDate[currentDate] || [];
             if (pathAfterDomain !== '' && !currentURLs.includes(pathAfterDomain)) {
-                currentURLs.unshift(pathAfterDomain);           
-                storedURLsByDate[currentDate] = currentURLs;              
+                currentURLs.unshift(pathAfterDomain);
+                storedURLsByDate[currentDate] = currentURLs;
                 localStorage.setItem('RomModelVisitURLsByDate', JSON.stringify(storedURLsByDate));
             }
         }
@@ -512,4 +804,3 @@ function GetRoomVisit() {
 
 // Llamar a la función
 GetRoomVisit();
-
