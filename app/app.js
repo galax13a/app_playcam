@@ -7,10 +7,9 @@ const routes = require('./routes');
 const { createMainWindow, createWinTraductor, createModeratorCamWindow, createWinFile } = require('./windows'); // Importa el nuevo módulo
 const cors = require('cors');
 
-
-let Reload = false;
+let Reload = true;
+let devtools = false; //open toolsDev
 let expressApp;
-let devtools = true; //open toolsDev
 let MainWinApp, WinPLayRecord;
 let CopyTraductor = null;
 const PORT = process.env.PORT || 3069;
@@ -159,7 +158,7 @@ app.on("ready", function () {
 });
 
 ipcMain.handle('getSources', async () => {
-  console.log('source');
+  //console.log('source');
   return await desktopCapturer.getSources({ types: ['window', 'screen'] })
   
 })

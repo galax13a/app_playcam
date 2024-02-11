@@ -6,6 +6,7 @@
   "main": "app/app.js",
   "scripts": {
     "tester": "electron app/test.js",
+    "watch": "nodemon --exec electron .",
     "start": "electron .",
     "package": "electron-forge package",
     "make": "electron-forge make",
@@ -13,7 +14,10 @@
     "lint": "echo \"No linting configured\"",
     "build": "electron-builder",
     "pack": "electron-builder --dir",
-    "dist": "electron-builder --win --x64"
+    "build-win-64": "electron-builder --win --x64",
+    "build-win-32": "electron-builder --win --ia32",
+    "build-linux": "electron-builder --linux",
+    "build-mac": "electron-builder --mac"
   },
   "build": {
     "appId": "app.playscam.com",

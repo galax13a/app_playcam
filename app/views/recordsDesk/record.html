@@ -5,6 +5,13 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>PlayCam Record Video</title>
+    <link href="../../../node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../node_modules/boxicons/css/boxicons.min.css">
+    <style>
+        body {
+            background: radial-gradient(328px at 2.9% 15%, rgb(191, 224, 251) 0%, rgb(232, 233, 251) 25.8%, rgb(252, 239, 250) 50.8%, rgb(234, 251, 251) 77.6%, rgb(240, 251, 244) 100.7%);
+        }
+    </style>
 </head>
 
 <body>
@@ -12,51 +19,98 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
-                <div class="page-header text-center">
+                <div class="text-center">
                     <h1>
                         PLaycam Record
                     </h1>
-                    <h4>¡Captura las Transmisiones de tu Modelo Favorita con PlayCam Record!</h4>
-                    <p>¿Eres fanático de seguir a tu modelo favorita en sus transmisiones en vivo pero te has perdido
-                        algunas? Con PlayCam Record, nunca te perderás otra vez una sola transmisión. Nuestra aplicación
-                        te permite capturar fácilmente las transmisiones en vivo de tu modelo preferida y guardarlas
-                        directamente en tu dispositivo para verlas en cualquier momento.</p>
-                    <div class="row">
-                        <div class="col-md-12 text-center">
-                            <video style="width: 640px; height: 480px;"></video>
+                    <h4>Capture Your Favorite Model's Live Streams with <mark>PlayCam Record</mark>!</h4>
+                    <p>Are you a fan of following your favorite model's live streams but have missed some? With
+                        <strong>PlayCam Record</strong>, you'll never miss another stream again. Our app allows you to
+                        easily capture the live streams of your favorite model and save them directly to your device in
+                        web video format (<strong>.webm</strong>) to watch anytime.</p>
+
+                    <div class="container text-center">
+                        <select id="selectMenu" class="form-select"></select>
+                        <div class="row shadow m-2 p-2">
+                            <div class="col-md-12">
+                                <input type="file" id="fileInput" accept="video/webm" style="display: none;">
+                                <video id="video-grabar" class="mx-auto w-100" style="height: 380px;">Loading
+                                    Video.....</video>
+                            </div>
                         </div>
                     </div>
-                    <ol>
-                        <li><strong>Captura sin esfuerzo:</strong> Con solo unos pocos toques, puedes grabar las
-                            transmisiones en vivo mientras las ves en tiempo real.</li>
-                        <li><strong>Guarda tus favoritas:</strong> Almacena todas las transmisiones grabadas en tu
-                            dispositivo para verlas una y otra vez cuando lo desees.</li>
-                        <li><strong>Calidad inigualable:</strong> Disfruta de una calidad de grabación excepcional para
-                            asegurarte de que cada detalle de la transmisión se conserve de manera vívida.</li>
-                    </ol>
 
+
+                    <div class="row">
+                        <div class="container">
+                            <div class="col-md-12 text-center m-2 p-2">
+                                <hr>
+                                <button id="loadVideoBtn" title="Load Video Cam" class="round-button">
+                                    <i class='bx bx-cloud-upload fs-3'></i>
+                                </button>
+                                <button id="startBtn" class="round-button" title="Record"><i
+                                        class='bx bx-play-circle fs-3'></i></button>
+                                <button id="stopBtn" class="round-button" title="Stop Record">
+                                    <i class='bx bx-stop-circle fs-3'></i>
+                                </button>
+                                <button id="videoSelectBtn" class="button is-text d-none">Get Video Sources</button>
+                                <hr>
+                                <div class="container text-center">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <video id="previewVideo" class="mx-auto w-100"
+                                                style="height: 380px;"></video>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        <br>
+        <script src="../../../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+        <style>
+            .round-button {
+                display: inline-block;
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                background-color: white;
+                box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
+                /* Sombrero ligera */
+                transition: background-color 0.3s ease;
+                /* Transición de color */
+                cursor: pointer;
+            }
 
-        <br>
-        <div class="row">
-            <div class="col-md-12 text-center">
-                <button type="button" id="seleccionarFuenteVideo" class="btn btn-primary">Select Windows</button>
-                <button type="button" id="grabar" class="btn btn-danger" disabled>Record</button>
-                <button type="button" id="detener" class="btn btn-warning" disabled>Stop</button>
+            .round-button:hover {
+                background-color: yellow;
+                /* Cambia a amarillo al hacer hover */
+            }
 
-                <hr>
-                <button id="startBtn" class="button is-primary">Start</button>
-                <button id="stopBtn" class="button is-warning">Stop</button>
-            
-                <button id="videoSelectBtn" class="button is-text">Get Video Sources</button>
-                <select id="selectMenu"></select>
+            .round-button:active {
+                background-color: rgb(170, 12, 12);
+                /* Cambia a rojo al hacer clic */
+            }
 
-            </div>
-        </div>
-    </div>
+            .stop-button {
+                display: inline-block;
+                padding: 10px 20px;
+                background-color: orange;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+            }
+
+            .stop-button:hover {
+                background-color: red;
+            }
+        </style>
 
 </body>
 
