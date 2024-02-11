@@ -439,7 +439,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         modeChatLink.addEventListener('click', function (event) {
             const activeModelElement = document.querySelector("#main > div > div.genderTabs.bgColor.navigationAlt2BgImage.navigationAlt2BgColor.tabSectionBorder.top-section > div > div > a.gender-tab.tabElement.active.tabBorder.activeRoom.tabElementLink");
-
+            const tabmenuchatcategory = document.querySelector("#main > div > div.genderTabs.bgColor.navigationAlt2BgImage.navigationAlt2BgColor.tabSectionBorder.top-section");
             if (activeModelElement) {
                 if (modeChatToggle === 'true') {
                     localStorage.setItem('modeChatToggle', 'false');
@@ -448,10 +448,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
                 modeChatToggle = localStorage.getItem('modeChatToggle');
                 if (modeChatToggle === 'true') {
-                    createNotification('Mode Chat Active');
+                    createNotification('Mode Chat Active');                    
+                    tabmenuchatcategory.style.display = 'none';
 
                 } else {
                     createNotification('Mode Chat Disabled', 'red');
+                    tabmenuchatcategory.style.display = 'block';
                 }
 
             } else {

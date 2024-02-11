@@ -130,13 +130,14 @@ async function createModeratorCamWindow(config) {
       width: 800,
       height: 600,
       webPreferences: {
-        nodeIntegration: false,
+        nodeIntegration: true,
         contextIsolation: true,
         preload: path.join(__dirname, preloader),
       },
       icon: path.join(__dirname, icon),
     });
-
+   
+    
     if (devtools) {
       Win_moderator.webContents.openDevTools();
     }
@@ -160,8 +161,41 @@ async function createModeratorCamWindow(config) {
   return Win_moderator;
 }
 
+async function createWinFile(config) { // load file
+  const { url, icon, devtools, preloader, node = false } = config;
+let winLoad;
+winLoad = new BrowserWindow({
+      width: 800,
+      height: 600,
+      webPreferences: {
+        nodeIntegration: true,
+        contextIsolation: false,
+        preload: path.join(__dirname, preloader),
+      },
+      icon: path.join(__dirname, icon),
+    });   
+    
+    if (devtools) {
+      winLoad.webContents.openDevTools();
+    }
+
+    winLoad.setMenu(null);
+    console.log(path.join(__dirname, url));
+    await winLoad.loadFile(path.join(__dirname, url));
+    await winLoad.maximize();    
+   
+    winLoad.on('closed', () => {
+      
+      winLoad = null;
+    });
+
+
+  return winLoad;
+}
+
 module.exports = {
   createMainWindow,
   createWinTraductor,
   createModeratorCamWindow,
+  createWinFile,
 };

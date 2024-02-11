@@ -1,5 +1,7 @@
 /* ===== Scrollbar CSS ===== */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+
   /* Firefox */
   * {
     scrollbar-width: auto;
@@ -160,6 +162,10 @@
 .mt-4 {
     margin-top: 1.5rem !important;
 }
+.mt-5 {
+    margin-top: 5rem !important;
+}
+
 
 .mb-0 {
     margin-bottom: 0 !important;
@@ -249,7 +255,7 @@
     --color-info-dark: #7d8da1;
     --color-dark: #363949;
     --color-light: rgba(132, 139, 200, 0.18);
-    --color-dark-variant: #677483;
+    --color-dark-variant: #678375;
     --color-background: #f6f6f9;
     --card-border-radius: 2rem;
     --border-radius-1: 0.4rem;
@@ -257,15 +263,17 @@
     --card-padding: 1.8rem;
     --padding-1: 1.2rem;
     --box-shadow: 0 2rem 3rem var(--color-light);
+    --logis: #67028f;
 }
 
 .dark-mode-variables{
     --color-background: #181a1e;
     --color-white: #202528;
     --color-dark: #edeffd;
-    --color-dark-variant: #a3bdcc;
+    --color-dark-variant: #92ca8b;
     --color-light: rgba(0, 0, 0, 0.4);
     --box-shadow: 0 2rem 3rem var(--color-light);
+    --logis: #0ddaad;
 }
 
 *{
@@ -346,8 +354,9 @@ b{
     color: var(--color-danger);
 }
 .logis {
-    color:#1cffd9;
+    color: var(--logis);
 }
+
 
 .success{
     color: var(--color-success);
@@ -990,11 +999,19 @@ main .recent-orders a{
 
 /* Estilos específicos para los botones */
 button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     padding: 10px 20px;
     font-size: 16px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+}
+
+/* Estilos del icono */
+button i {
+    margin-right: 5px; /* Ajusta el espacio entre el icono y el texto según tu preferencia */
 }
 
 

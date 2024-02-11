@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>PlayCam Record Video</title>
+</head>
+
+<body>
+    <br>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="page-header text-center">
+                    <h1>
+                        PLaycam Record
+                    </h1>
+                    <h4>¡Captura las Transmisiones de tu Modelo Favorita con PlayCam Record!</h4>
+                    <p>¿Eres fanático de seguir a tu modelo favorita en sus transmisiones en vivo pero te has perdido
+                        algunas? Con PlayCam Record, nunca te perderás otra vez una sola transmisión. Nuestra aplicación
+                        te permite capturar fácilmente las transmisiones en vivo de tu modelo preferida y guardarlas
+                        directamente en tu dispositivo para verlas en cualquier momento.</p>
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <video style="width: 640px; height: 480px;"></video>
+                        </div>
+                    </div>
+                    <ol>
+                        <li><strong>Captura sin esfuerzo:</strong> Con solo unos pocos toques, puedes grabar las
+                            transmisiones en vivo mientras las ves en tiempo real.</li>
+                        <li><strong>Guarda tus favoritas:</strong> Almacena todas las transmisiones grabadas en tu
+                            dispositivo para verlas una y otra vez cuando lo desees.</li>
+                        <li><strong>Calidad inigualable:</strong> Disfruta de una calidad de grabación excepcional para
+                            asegurarte de que cada detalle de la transmisión se conserve de manera vívida.</li>
+                    </ol>
+
+                </div>
+            </div>
+        </div>
+        <br>
+
+        <br>
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <button type="button" id="seleccionarFuenteVideo" class="btn btn-primary">Select Windows</button>
+                <button type="button" id="grabar" class="btn btn-danger" disabled>Record</button>
+                <button type="button" id="detener" class="btn btn-warning" disabled>Stop</button>
+
+                <hr>
+                <button id="startBtn" class="button is-primary">Start</button>
+                <button id="stopBtn" class="button is-warning">Stop</button>
+            
+                <button id="videoSelectBtn" class="button is-text">Get Video Sources</button>
+                <select id="selectMenu"></select>
+
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

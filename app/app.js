@@ -1,18 +1,18 @@
 // app.js
 //const { app, ipcMain, Notification} = require('electron');
-const { app,ipcMain, BrowserWindow  } = require('electron')
+const { app, ipcMain, BrowserWindow , desktopCapturer, dialog} = require('electron')
 const express = require('express');
 const path = require('path');
 const routes = require('./routes');
-const { createMainWindow, createWinTraductor, createModeratorCamWindow } = require('./windows'); // Importa el nuevo módulo
+const { createMainWindow, createWinTraductor, createModeratorCamWindow, createWinFile } = require('./windows'); // Importa el nuevo módulo
 const cors = require('cors');
 
 
 let Reload = false;
 let expressApp;
-let devtools = false; //open toolsDev
+let devtools = true; //open toolsDev
 let MainWinApp, WinPLayRecord;
-let CopyTraductor = null; 
+let CopyTraductor = null;
 const PORT = process.env.PORT || 3069;
 let Win_Youtube;
 
@@ -38,7 +38,7 @@ async function startExpress() {
   expressApp.use(cors());  // Permitir solicitudes CORS
   expressApp.use(routes);
 
-  
+
   await new Promise(resolve => {
     expressApp.listen(PORT, () => {
       console.log(`Express server running on http://localhost:${PORT}`);
@@ -57,12 +57,12 @@ app.whenReady().then(async () => {
   app.setAppUserModelId(process.execPath);
 
   ipcMain.on('open-traductor-window', () => {  // Win Traductor
-      createTraductorWindow();
+    createTraductorWindow();
   });
 
   ipcMain.on('copied-text-traductor', (event, copiedText) => { //Copied-text-traductor
     console.log('Texto copiado desde el traductor:', copiedText);
-    CopyTraductor = copiedText;  
+    CopyTraductor = copiedText;
   });
 
   ipcMain.on('open-moderator-window', () => { //win Moderator..
@@ -75,7 +75,17 @@ app.whenReady().then(async () => {
     });
   });
 
-  
+  ipcMain.on('open-record', () => { //win record..
+    console.log('Moderator IPMAIN');
+    const moderatorCamWindow = createWinFile({
+      url: './views/recordsDesk/record.html',
+      icon: 'public/images/rec.png',
+      devtools: devtools,
+      node : true,
+      preloader: './views/recordsDesk/preload-record.js'
+    });
+  });
+
 
   ipcMain.on('open-voice-rec-window', () => { //win Moderator..
 
@@ -95,9 +105,9 @@ app.whenReady().then(async () => {
     WinPLayRecord.on('closed', () => {
       // Establecer la variable 'win' a null cuando la ventana se cierre
       WinPLayRecord = null;
-    });  
+    });
 
-});
+  });
 
   ipcMain.on('open-youtube-window', () => { //win Moderator..
 
@@ -124,10 +134,10 @@ app.whenReady().then(async () => {
 
 async function createTraductorWindow() { // createTraductorWindow
   const traductorWindow = await createWinTraductor({
-      url: 'https://translate.google.com/?hl=es&tab=TT&sl=en&tl=es&op=translate',
-      icon: 'public/images/traducir.png',
-      devtools: true,
-      preloader: './views/traductor/preload-traductor.js'
+    url: 'https://translate.google.com/?hl=es&tab=TT&sl=en&tl=es&op=translate',
+    icon: 'public/images/traducir.png',
+    devtools: true,
+    preloader: './views/traductor/preload-traductor.js'
   });
 
   console.log('IPC traductor');
@@ -145,5 +155,23 @@ app.on('activate', function () {
 });
 
 app.on("ready", function () {
- 
+
 });
+
+ipcMain.handle('getSources', async () => {
+  console.log('source');
+  return await desktopCapturer.getSources({ types: ['window', 'screen'] })
+  
+})
+
+ipcMain.handle('showSaveDialog', async () => {
+  return await dialog.showSaveDialog({
+    buttonLabel: 'Save video',
+    defaultPath: `vid-${Date.now()}.webm`
+  });
+})
+
+ipcMain.handle('getOperatingSystem', () => {
+  return process.platform
+})
+   
