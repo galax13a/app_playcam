@@ -4,7 +4,7 @@ let domain = "https://chaturbate.com";
 setTimeout(() => {
     hideOverlay();
     document.body.style.display = 'block'; // Mostrar el cuerpo después de ocultar el overlay
-}, 100);
+}, 10);
 
 function hideOverlay() {
     // Crear el overlay
@@ -29,7 +29,7 @@ function hideOverlay() {
     document.body.appendChild(overlay);
     setTimeout(() => {
         document.body.removeChild(overlay);
-    }, 2000);
+    }, 1000);
 }
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -100,12 +100,24 @@ document.addEventListener('DOMContentLoaded', function () {
     const footerHolderSelector = "#footer-holder";
     const contenido = document.querySelector("#main");
     const topi = document.querySelector("#main > div.top-section");
-    const banner = document.querySelector("#header > div.ad > a > img");
+
+
 
     hideElement(headerSelector);
     hideElement(footerHolderSelector);
     hideElement(navLinkSelector);
-    hideElement(banner);
+   
+/*
+    setInterval(() => {
+        let bannerImg = document.querySelector("#header > div.ad");
+        let banner = document.querySelector("#header > div.ad > a");
+        //*[@id="header"]/div[1]
+        console.log(document.evaluate('*[@id="header"]/div[1]', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue);
+
+        if(bannerImg) hideElement(banner)
+        if(bannerImg) hideElement(bannerImg);
+      }, 2000); // 3000 milisegundos = 3 segundos
+      */
 
     if (document.querySelector(broadcastYourselfSelector)) {
         hideElement(broadcastYourselfSelector);
@@ -183,7 +195,7 @@ document.addEventListener('DOMContentLoaded', function () {
         link.style.marginRight = '15px'; // Añadir espacio entre enlaces
         link.style.color = 'white';
         link.style.textDecoration = 'none';
-        link.style.fontSize = '2.26rem'; // Tamaño de letra
+        link.style.fontSize = '1.66rem'; // Tamaño de letra
         link.style.fontWeight = 'bold'; // Negrita
         link.style.padding = '3px';
         link.style.margin = '3px';
@@ -209,11 +221,11 @@ document.addEventListener('DOMContentLoaded', function () {
     const links = [
         createLink('link0', '😎 Playcam', 'https://en.chaturbate.com'),
         createLink('link1', '🔎 Search'),
-        createLink('link6', '💭 Mode Chat'),
-        createLink('link-send-tokens', '🔔Auto Tips'),
-        createLink('link-chat-rec-room', '🔴 Rec Tokens'),
+        createLink('link6', '💭 Chat'),
+        createLink('link-send-tokens', '🔔Auto'),
+        createLink('link-chat-rec-room', '🔴 Rec'),
         createLink('link-follow', '💚 Follow'),
-        createLink('link-camx', '🧿 Cams'),
+        createLink('link-camx', '🧿'),
         createLink('link-login', '🔒Login'),
 
     ];
@@ -440,6 +452,7 @@ document.addEventListener('DOMContentLoaded', function () {
         modeChatLink.addEventListener('click', function (event) {
             const activeModelElement = document.querySelector("#main > div > div.genderTabs.bgColor.navigationAlt2BgImage.navigationAlt2BgColor.tabSectionBorder.top-section > div > div > a.gender-tab.tabElement.active.tabBorder.activeRoom.tabElementLink");
             const tabmenuchatcategory = document.querySelector("#main > div > div.genderTabs.bgColor.navigationAlt2BgImage.navigationAlt2BgColor.tabSectionBorder.top-section");
+            const closechat = document.querySelector("#chat-close-btn");
             if (activeModelElement) {
                 if (modeChatToggle === 'true') {
                     localStorage.setItem('modeChatToggle', 'false');
@@ -450,6 +463,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (modeChatToggle === 'true') {
                     createNotification('Mode Chat Active');                    
                     tabmenuchatcategory.style.display = 'none';
+                    closechat.style.display = 'none';
+                    document.querySelector("#VideoPanel > div.playerTitleBar").style.display = 'none';
+                    document.querySelector("#VideoPanel > div.playerTitleBar > div:nth-child(2)").style.display = 'none';
+                    document.querySelector("#header > div.ad").style.display = 'none';
 
                 } else {
                     createNotification('Mode Chat Disabled', 'red');

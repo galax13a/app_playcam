@@ -1,4 +1,4 @@
-console.log('👋 This message is being logged by "renderer.js", included via webpack');
+console.log('👋 This message is being  record');
 document.addEventListener('DOMContentLoaded', () => {
 
   const { ipcRenderer } = require('electron');
@@ -8,12 +8,33 @@ document.addEventListener('DOMContentLoaded', () => {
   let recordedChunks = [];
   let loadPreview = false;
 
-  const startBtn = document.getElementById('startBtn');
-  startBtn.onclick = e => {
-    startRecording();
-    startBtn.innerHTML = `<i class='bx bx-video-recording fs-2'></i>`;
-    startBtn.style.backgroundColor = 'red';
-  };
+//bton start record
+const startBtn = document.getElementById('startBtn');
+
+startBtn.onclick = e => {
+  startBtn.disabled = true; // Deshabilitar el botón mientras se realiza la cuenta regresiva
+
+  // Obtener el elemento para mostrar la cuenta regresiva
+  const countdownElement = document.getElementById('countdown');
+
+  // Cuenta regresiva antes de comenzar a grabar
+  let countdown = 5;
+  countdownElement.textContent = countdown; // Mostrar el primer número
+  countdown--;
+  const countdownInterval = setInterval(() => {
+    countdownElement.textContent = countdown;
+    countdown--;
+    if (countdown < 0) {
+      clearInterval(countdownInterval);
+      countdownElement.innerHTML = "<i class='bx bx-play' ></i> Starting.. ";
+      // Aquí puedes poner el código para iniciar la grabación
+      startRecording();
+      startBtn.innerHTML = `<i class='bx bx-video-recording fs-2'></i>`;
+      startBtn.style.backgroundColor = 'red';
+    }
+  }, 1000);
+};
+
 
   const stopBtn = document.getElementById('stopBtn');
 //  stopBtn.style.display = 'none';
@@ -22,13 +43,15 @@ document.addEventListener('DOMContentLoaded', () => {
     mediaRecorder.stop();
     startBtn.innerText = 'Start';
     startBtn.style.backgroundColor = 'white';
+    startBtn.disabled = false; 
   };
 
   const videoSelectBtn = document.getElementById('videoSelectBtn');
   videoSelectBtn.onclick = getVideoSources;
+  //getVideoSources();
 
   const selectMenu = document.getElementById('selectMenu')
-  setInterval(getVideoSources, 2600);
+  setInterval(getVideoSources, 1600);
   // Buttons
 
   const fileInput = document.getElementById('fileInput');

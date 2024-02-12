@@ -8,7 +8,7 @@ const { createMainWindow, createWinTraductor, createModeratorCamWindow, createWi
 const cors = require('cors');
 
 let Reload = true;
-let devtools = false; //open toolsDev
+let devtools = true; //open toolsDev
 let expressApp;
 let MainWinApp, WinPLayRecord;
 let CopyTraductor = null;

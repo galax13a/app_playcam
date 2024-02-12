@@ -11,17 +11,27 @@
         body {
             background: radial-gradient(328px at 2.9% 15%, rgb(191, 224, 251) 0%, rgb(232, 233, 251) 25.8%, rgb(252, 239, 250) 50.8%, rgb(234, 251, 251) 77.6%, rgb(240, 251, 244) 100.7%);
         }
+        .countdown-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 69pxp; /* Ajusta la altura según tu necesidad */
+            font-size: 2rem; /* Tamaño de la fuente */
+            color: black;            
+          }
+          
     </style>
 </head>
 
 <body>
-    <br>
+     
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
                 <div class="text-center">
-                    <h1>
-                        PLaycam Record
+                    <h1 class="shadow-sm rounded-3">
+                        <i class='bx bxs-video-recording text-danger ' ></i>  
+                         PLaycam Record
                     </h1>
                     <h4>Capture Your Favorite Model's Live Streams with <mark>PlayCam Record</mark>!</h4>
                     <p>Are you a fan of following your favorite model's live streams but have missed some? With
@@ -30,7 +40,7 @@
                         web video format (<strong>.webm</strong>) to watch anytime.</p>
 
                     <div class="container text-center">
-                        <select id="selectMenu" class="form-select"></select>
+                        <select id="selectMenu" class="form-select m-2 shadow border-3"></select>
                         <div class="row shadow m-2 p-2">
                             <div class="col-md-12">
                                 <input type="file" id="fileInput" accept="video/webm" style="display: none;">
@@ -45,6 +55,7 @@
                         <div class="container">
                             <div class="col-md-12 text-center m-2 p-2">
                                 <hr>
+                                <div id="countdown" class="countdown-container">Rec</div> 
                                 <button id="loadVideoBtn" title="Load Video Cam" class="round-button">
                                     <i class='bx bx-cloud-upload fs-3'></i>
                                 </button>

@@ -127,8 +127,9 @@ async function createModeratorCamWindow(config) {
 
   if (!Win_moderatorVisible) {
     Win_moderator = new BrowserWindow({
-      width: 800,
-      height: 600,
+      width: 660,
+      height: 900,
+      maximizable: false,
       webPreferences: {
         nodeIntegration: true,
         contextIsolation: true,
@@ -137,7 +138,8 @@ async function createModeratorCamWindow(config) {
       icon: path.join(__dirname, icon),
     });
    
-    
+  Win_moderator.maximize();    
+
     if (devtools) {
       Win_moderator.webContents.openDevTools();
     }
@@ -146,8 +148,9 @@ async function createModeratorCamWindow(config) {
         });
 
     Win_moderator.setMenu(null);
-    await Win_moderator.loadURL(url);
-    Win_moderator.maximize();    
+    //await Win_moderator.hide();
+    await Win_moderator.loadURL(url); 
+    //await Win_moderator.show();
 
    
     Win_moderator.on('closed', () => {
@@ -157,6 +160,8 @@ async function createModeratorCamWindow(config) {
 
     Win_moderatorVisible = true;
   } else return false;
+
+
 
   return Win_moderator;
 }
