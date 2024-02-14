@@ -1,0 +1,43 @@
+.new {
+    color: #28f83a;
+}
+
+.bg-opacity-25 {
+    background-color: rgba(0, 0, 0, 0.90);
+    color: aquamarine;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+body {
+    background: linear-gradient(89.7deg, rgb(0, 32, 95) 2.8%, rgb(132, 53, 142) 97.8%);
+}
+
+.exhibitionist-img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.exhibitionist-item {
+    border: none;
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.exhibitionist-details {
+    display: flex;
+    align-items: center;
+}
+
+.exhibitionist-info {
+    flex-grow: 1;
+}
+
+.logis {
+    color: rgb(250, 78, 78);
+}
+
+.nameTag {
+    color: #fbff00;
+}

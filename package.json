@@ -76,6 +76,8 @@
     "puppeteer-core": "^21.9.0",
     "puppeteer-in-electron": "^3.0.5",
     "sqlite3": "^5.1.7",
+    "vue": "^3.4.19",
+    "vue2": "^1.0.0",
     "ytdl-core": "^4.11.5"
   },
   "devDependencies": {

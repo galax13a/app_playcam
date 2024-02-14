@@ -226,10 +226,43 @@ router.get('/app/youtube/delete/:audio', (req, res) => {
 
 router.get('/app/chaturbate/get-exhibitionist', async (req, res) => {
   try {
-      const response = await fetch('https://chaturbate.com/api/public/affiliates/onlinerooms/?wm=gQ4iQ&client_ip=request_ip&exhibitionist=true&limit=500');
+      limit = 6;
+      let url = `https://chaturbate.com/api/public/affiliates/onlinerooms/?wm=gQ4iQ&client_ip=request_ip&exhibitionist=true&limit=${limit}`;       
+      const response = await fetch(url);
       const data = await response.json();
       
       res.render('exhibitionist/exhibitionist', { exhibitionists: data.results }); // Renderiza la vista con todos los resultados obtenidos
+  } catch (error) {
+      console.error('Error:', error);
+      res.status(500).json({ error: 'There was an error processing the request, Server Express PlaycamHub' });
+  }
+});
+
+router.get('/app/chaturbate/get-exhibitionist/filter', async (req, res) => {
+  try {
+      limit = 6;
+      let url = `https://chaturbate.com/api/public/affiliates/onlinerooms/?wm=gQ4iQ&client_ip=request_ip&exhibitionist=true&limit=${limit}`;
+      const response = await fetch(url);      
+      const data = await response.json();
+
+      let filteredExhibitionists = data.results;
+
+      // Filtrar según el campo seleccionado en el formulario
+      const filterBy = req.query.filter_by;
+      if (filterBy) {
+          const filterValue = req.query[filterBy];
+          filteredExhibitionists = filteredExhibitionists.filter(exhibitionist => exhibitionist[filterBy] == filterValue);
+      }
+
+      // Ordenar según los segundos en línea si se selecciona "Ascending" en el formulario
+      if (req.query.seconds_online === 'asc') {
+          filteredExhibitionists.sort((a, b) => a.seconds_online - b.seconds_online);
+      } else if (req.query.seconds_online === 'desc') {
+          filteredExhibitionists.sort((a, b) => b.seconds_online - a.seconds_online);
+      }
+
+      // Enviar los exhibitionists filtrados y ordenados en formato JSON
+      res.json({ exhibitionists: filteredExhibitionists });
   } catch (error) {
       console.error('Error:', error);
       res.status(500).json({ error: 'There was an error processing the request, Server Express PlaycamHub' });
