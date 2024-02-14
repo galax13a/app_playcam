@@ -11,6 +11,8 @@
     <script defer src="/modules/htmx.org/dist/htmx.min.js"></script>
     <link rel="icon" href="/images/logo2.png" type="image/png">
     <script defer src="/js/lib/vue2.js"></script>
+    <script defer src="/modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
 </head>
 
 <body>
@@ -56,9 +58,9 @@
                                             class="btn btn-dark text-white bg-black bg-opacity-50 d-none">
                                             Visit Room
                                         </a>
-                                        <div class="progress d-none">
-                                            <div class="progress-bar" role="progressbar" style="width: 100%"
-                                                aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                        <div class="progress" v-if="exhibitionist.showProgress">
+                                            <div class="progress-bar" role="progressbar" :style="{ width: exhibitionist.progress + '%' }"
+                                                aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">{{ exhibitionist.progress }}%</div>
                                         </div>
                                     </p>
                                 </div>
@@ -94,13 +96,16 @@
                             <button type="submit" class="btn btn-dark shadow">Filter</button>
                         </form>
                     </div>
+
+                    <div id="trafico" class="container p-3 m-2 shadow rounded-3 bg-black bg-opacity-50 text-warning ">
+                        <button class="btn btn-primary" @click="startTraffic">Start Traffic ({{ exhibitionists.length }})</button>
+                    </div>
+
                 </div>
             </div>
         </div>
        
     </div>
-
-    <script src="/modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -108,27 +113,28 @@
                 el: '#app',
                 data: {
                     exhibitionists: [],
-                    filterBy: 'num_users', // Inicializa el filtro predeterminado
-                    filteredExhibitionists: [], // Almacena la lista de exhibicionistas filtrados
-                    sortOrder: 'desc' // Inicializa el orden predeterminado
+                    filterBy: 'num_users',
+                    filteredExhibitionists: [],
+                    sortOrder: 'desc' 
                 },
                 mounted() {
-                    this.loadExhibitionists(); // Cargar los datos al montar el componente
+                    this.loadExhibitionists();
                 },
                 methods: {
-                    async loadExhibitionists() {
-                        // Lógica para cargar los datos de la API
+                    async loadExhibitionists() {                      
                         const limit = 6;
                         let url = `https://chaturbate.com/api/public/affiliates/onlinerooms/?wm=gQ4iQ&client_ip=request_ip&exhibitionist=true&limit=${limit}`;
                         const response = await fetch(url);
                         const data = await response.json();
-                        this.exhibitionists = data.results; // Actualizar los datos con la respuesta de la API
-                        this.filteredExhibitionists = this.exhibitionists.slice(); // Inicializar la lista filtrada
-                        this.filteredExhibitionists.sort((b, a) => a.num_users - b.num_users);
-                        
+                        this.exhibitionists = data.results;
+                        this.filteredExhibitionists = this.exhibitionists.map(exhibitionist => ({
+                            ...exhibitionist,
+                            showProgress: false,
+                            progress: 0
+                        }));
+                        this.filteredExhibitionists.sort((b, a) => a.num_users - b.num_users);                       
                     },
-                    async submitForm() {
-                    
+                    async submitForm() {                    
                         this.applyFilters();
                     },
                     applyFilters() {                        
@@ -145,7 +151,36 @@
                             default:
                                 break;
                         }
-                    },                    
+                    },     
+                    startTraffic() {
+                        console.log('StartTraffic');
+                        let index = 0;
+                        const intervalId = setInterval(() => {
+                            if (index < this.filteredExhibitionists.length) {
+                                const exhibitionist = this.filteredExhibitionists[index];
+                                let progress = 0;
+                                exhibitionist.progress = 0; // Inicializar el progreso al inicio
+                                exhibitionist.showProgress = true; // Mostrar la barra de progreso al iniciar el tráfico
+                                const progressInterval = setInterval(() => {
+                                    if (progress <= 100) {
+                                        exhibitionist.progress = progress;
+                                        progress += 25;
+                                    } else {
+                                        exhibitionist.progress = 100;
+                                        clearInterval(progressInterval);
+                                        setTimeout(() => {
+                                            exhibitionist.showProgress = false; // Ocultar la barra de progreso después de completarse
+                                            console.log(`Exhibitionist ${exhibitionist.username} finished.`);
+                                        }, 1000);
+                                        index++;
+                                    }
+                                }, 1000);
+                            } else {
+                                clearInterval(intervalId);
+                            }
+                        }, 2000); // Intervalo de 2 segundos entre cada exhibicionista
+                    },                                      
+                             
                     calculateTime(seconds) {
                         // Lógica para calcular el tiempo en línea
                         const hours = Math.floor(seconds / 3600);
