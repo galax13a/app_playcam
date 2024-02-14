@@ -82,7 +82,6 @@ router.get('/app/settings', (req, res) => {
 //const audiosDirectory = path.join(__dirname, 'public', 'audios', 'youtube');
 const audiosDirectory = path.join(app.getPath('userData'), 'public', 'audios', 'youtube');
 
-
 router.get('/app/youtube', (req, res) => {
   if (!fs.existsSync(audiosDirectory)) {
     res.render('youtube/youtube', { audioFiles: [] });
@@ -163,7 +162,6 @@ router.post('/app/youtube/download', async (req, res) => {
   }
 });
 
-
 router.get('/app/youtube/play/:audio', (req, res) => {
   const audioFile = req.params.audio;
   const filePath = path.join(audiosDirectory, audioFile);
@@ -225,6 +223,19 @@ router.get('/app/youtube/delete/:audio', (req, res) => {
   }
 
 });
+
+router.get('/app/chaturbate/get-exhibitionist', async (req, res) => {
+  try {
+      const response = await fetch('https://chaturbate.com/api/public/affiliates/onlinerooms/?wm=gQ4iQ&client_ip=request_ip&exhibitionist=true&limit=500');
+      const data = await response.json();
+      
+      res.render('exhibitionist/exhibitionist', { exhibitionists: data.results }); // Renderiza la vista con todos los resultados obtenidos
+  } catch (error) {
+      console.error('Error:', error);
+      res.status(500).json({ error: 'There was an error processing the request, Server Express PlaycamHub' });
+  }
+});
+
 
 
 

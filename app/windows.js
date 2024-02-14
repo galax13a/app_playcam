@@ -5,7 +5,7 @@ const path = require('path');
 const fs = require('fs');
 const { app } = require('electron');
 
-let mainWindow, Win_traductor, Win_moderator;
+let mainWindow, Win_traductor, Win_moderator, Win_exhibitionist = false;
 let Win_traductorVisible = false, Win_moderatorVisible = false;
 const port = process.env.PORT || 3000;
 
@@ -137,22 +137,21 @@ async function createModeratorCamWindow(config) {
       },
       icon: path.join(__dirname, icon),
     });
-   
-  Win_moderator.maximize();    
+
+    Win_moderator.maximize();
 
     if (devtools) {
       Win_moderator.webContents.openDevTools();
     }
-        Win_moderator.webContents.on('did-finish-load', () => {
-              console.log('finsh win moderator');
-        });
+    Win_moderator.webContents.on('did-finish-load', () => {
+      console.log('finsh win moderator');
+    });
 
     Win_moderator.setMenu(null);
     //await Win_moderator.hide();
-    await Win_moderator.loadURL(url); 
+    await Win_moderator.loadURL(url);
     //await Win_moderator.show();
 
-   
     Win_moderator.on('closed', () => {
       Win_moderatorVisible = false;
       Win_moderator = null;
@@ -161,46 +160,79 @@ async function createModeratorCamWindow(config) {
     Win_moderatorVisible = true;
   } else return false;
 
-
-
   return Win_moderator;
 }
 
 async function createWinFile(config) { // load file
   const { url, icon, devtools, preloader, node = false } = config;
-let winLoad;
-winLoad = new BrowserWindow({
-      width: 800,
-      height: 600,
-      webPreferences: {
-        nodeIntegration: true,
-        contextIsolation: false,
-        preload: path.join(__dirname, preloader),
-      },
-      icon: path.join(__dirname, icon),
-    });   
-    
-    if (devtools) {
-      winLoad.webContents.openDevTools();
-    }
+  let winLoad;
+  winLoad = new BrowserWindow({
+    width: 800,
+    height: 600,
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
+      preload: path.join(__dirname, preloader),
+    },
+    icon: path.join(__dirname, icon),
+  });
 
-    winLoad.setMenu(null);
-    console.log(path.join(__dirname, url));
-    await winLoad.loadFile(path.join(__dirname, url));
-    await winLoad.maximize();    
-   
-    winLoad.on('closed', () => {
-      
-      winLoad = null;
-    });
+  if (devtools) {
+    winLoad.webContents.openDevTools();
+  }
 
+  winLoad.setMenu(null);
+  console.log(path.join(__dirname, url));
+  await winLoad.loadFile(path.join(__dirname, url));
+  await winLoad.maximize();
+
+  winLoad.on('closed', () => {
+
+    winLoad = null;
+  });
 
   return winLoad;
 }
 
+async function createWinExhibitionist(config) { // load file createWinExhibitionist
+  let winLoad;
+  if (!Win_exhibitionist) {
+
+          const { url, icon, devtools, preloader, node = false } = config;
+       
+          winLoad = new BrowserWindow({
+            width: 1460,
+            height: 1260,
+            webPreferences: {
+              nodeIntegration: node,
+              contextIsolation: true,
+              preload: path.join(__dirname, preloader),
+            },
+            icon: path.join(__dirname, icon),
+          });
+
+          if (devtools) {
+            winLoad.webContents.openDevTools();
+          }
+
+          winLoad.setMenu(null);         
+          await winLoad.loadURL(url);
+          await winLoad.maximize();
+
+          winLoad.on('closed', () => {
+            winLoad = null;
+            Win_exhibitionist = false;
+          });
+        
+        Win_exhibitionist = true;
+    }
+
+  return winLoad;
+}
 module.exports = {
   createMainWindow,
   createWinTraductor,
   createModeratorCamWindow,
   createWinFile,
+  createWinExhibitionist
 };

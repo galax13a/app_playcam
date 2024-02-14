@@ -115,6 +115,11 @@
   body{
     background-color: black;
   }
+  
+  .icon-color {
+    color: var(--icon-color, #ad1501);
+}
+
 
   /* style.css */
 

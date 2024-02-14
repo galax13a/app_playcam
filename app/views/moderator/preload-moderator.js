@@ -221,11 +221,11 @@ document.addEventListener('DOMContentLoaded', function () {
     const links = [
         createLink('link0', '😎 Playcam', 'https://en.chaturbate.com'),
         createLink('link1', '🔎 Search'),
-        createLink('link6', '💭 Chat'),
-        createLink('link-send-tokens', '🔔Auto'),
-        createLink('link-chat-rec-room', '🔴 Rec'),
+        createLink('link6', '💭 ModeChat'),
+        createLink('link-send-tokens', '🔔Auto Tips'),
+        createLink('link-chat-rec-room', '🔴 Rec Tokens'),
         createLink('link-follow', '💚 Follow'),
-        createLink('link-camx', '🧿'),
+        createLink('link-camx', '🧿Cams Views'),
         createLink('link-login', '🔒Login'),
 
     ];

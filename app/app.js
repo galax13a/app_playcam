@@ -4,7 +4,7 @@ const { app, ipcMain, BrowserWindow , desktopCapturer, dialog} = require('electr
 const express = require('express');
 const path = require('path');
 const routes = require('./routes');
-const { createMainWindow, createWinTraductor, createModeratorCamWindow, createWinFile } = require('./windows'); // Importa el nuevo módulo
+const { createMainWindow, createWinTraductor, createModeratorCamWindow, createWinFile, createWinExhibitionist } = require('./windows'); // Importa el nuevo módulo
 const cors = require('cors');
 
 let Reload = true;
@@ -85,9 +85,7 @@ app.whenReady().then(async () => {
     });
   });
 
-
   ipcMain.on('open-voice-rec-window', () => { //win Moderator..
-
     console.log('voice-rec ');
     WinPLayRecord = new BrowserWindow({
       width: 960,
@@ -102,7 +100,6 @@ app.whenReady().then(async () => {
     }
 
     WinPLayRecord.on('closed', () => {
-      // Establecer la variable 'win' a null cuando la ventana se cierre
       WinPLayRecord = null;
     });
 
@@ -142,8 +139,7 @@ async function createTraductorWindow() { // createTraductorWindow
   console.log('IPC traductor');
 }
 
-
-app.on('window-all-closed', function () {
+app.on('window-all-closed', function () { //clsoe app
   if (process.platform !== 'darwin') app.quit();
 });
 
@@ -157,13 +153,12 @@ app.on("ready", function () {
 
 });
 
-ipcMain.handle('getSources', async () => {
-  //console.log('source');
+ipcMain.handle('getSources', async () => { // getSources Grabar video 
   return await desktopCapturer.getSources({ types: ['window', 'screen'] })
   
 })
 
-ipcMain.handle('showSaveDialog', async () => {
+ipcMain.handle('showSaveDialog', async () => { // save video
   return await dialog.showSaveDialog({
     buttonLabel: 'Save video',
     defaultPath: `vid-${Date.now()}.webm`
@@ -174,3 +169,16 @@ ipcMain.handle('getOperatingSystem', () => {
   return process.platform
 })
    
+
+  ipcMain.on('open-exhibitionist-window', () => { //win exhibitionist..
+    
+    console.log('open-exhibitionist-window');
+    const App_createWinExhibitionist = createWinExhibitionist({
+      url: `http://localhost:${PORT}/app/chaturbate/get-exhibitionist`,
+      icon: 'public/images/pervertido.png',
+      devtools: devtools,
+      preloader: './views/exhibitionist/preload-exhibitionist.js',
+      node: false,
+    });
+  });
+

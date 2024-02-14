@@ -72,12 +72,14 @@
     "htmx": "^0.0.2",
     "htmx.org": "^1.9.8",
     "notiflix": "^3.2.7",
+    "prisma": "^5.9.1",
     "puppeteer-core": "^21.9.0",
     "puppeteer-in-electron": "^3.0.5",
+    "sqlite3": "^5.1.7",
     "ytdl-core": "^4.11.5"
   },
   "devDependencies": {
-    "electron": "^28.2.0",
+    "electron": "^28.2.2",
     "electron-builder": "^24.9.1",
     "electron-reload": "^2.0.0-alpha.1"
   }
