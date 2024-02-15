@@ -201,8 +201,8 @@ async function createWinExhibitionist(config) { // load file createWinExhibition
           const { url, icon, devtools, preloader, node = false } = config;
        
           winLoad = new BrowserWindow({
-            width: 1460,
-            height: 1260,
+            width: 900,
+            height: 800,
             webPreferences: {
               nodeIntegration: node,
               contextIsolation: true,

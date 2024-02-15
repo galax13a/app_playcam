@@ -12,6 +12,17 @@ body {
     background: linear-gradient(89.7deg, rgb(0, 32, 95) 2.8%, rgb(132, 53, 142) 97.8%);
 }
 
+li::before {
+    content: '💜'; 
+    display: inline-block;
+    font-size: 20px; 
+    margin-right: 5px;
+  }
+  
+  li {
+    list-style-type: none;
+  }
+  
 .exhibitionist-img {
     width: 100px;
     height: 100px;
