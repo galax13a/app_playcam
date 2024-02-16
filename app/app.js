@@ -1,6 +1,6 @@
 // app.js
 //const { app, ipcMain, Notification} = require('electron');
-const { app, ipcMain, BrowserWindow , desktopCapturer, dialog} = require('electron')
+const { app, ipcMain, BrowserWindow, desktopCapturer, dialog } = require('electron')
 const express = require('express');
 const path = require('path');
 const routes = require('./routes');
@@ -80,7 +80,7 @@ app.whenReady().then(async () => {
       url: './views/recordsDesk/record.html',
       icon: 'public/images/rec.png',
       devtools: devtools,
-      node : true,
+      node: true,
       preloader: './views/recordsDesk/preload-record.js'
     });
   });
@@ -155,7 +155,7 @@ app.on("ready", function () {
 
 ipcMain.handle('getSources', async () => { // getSources Grabar video 
   return await desktopCapturer.getSources({ types: ['window', 'screen'] })
-  
+
 })
 
 ipcMain.handle('showSaveDialog', async () => { // save video
@@ -168,17 +168,41 @@ ipcMain.handle('showSaveDialog', async () => { // save video
 ipcMain.handle('getOperatingSystem', () => {
   return process.platform
 })
-   
 
-  ipcMain.on('open-exhibitionist-window', () => { //win exhibitionist..
-    
-    console.log('open-exhibitionist-window');
-    const App_createWinExhibitionist = createWinExhibitionist({
-      url: `http://localhost:${PORT}/app/chaturbate/get-exhibitionist`,
-      icon: 'public/images/pervertido.png',
-      devtools: devtools,
-      preloader: './views/exhibitionist/preload-exhibitionist.js',
-      node: false,
-    });
+
+ipcMain.on('open-exhibitionist-window', () => { //win exhibitionist..
+
+  const App_createWinExhibitionist = createWinExhibitionist({
+    url: `http://localhost:${PORT}/app/chaturbate/get-exhibitionist`,
+    icon: 'public/images/pervertido.png',
+    devtools: devtools,
+    preloader: './views/exhibitionist/preload-exhibitionist.js',
+    node: false,
   });
 
+});
+
+ipcMain.on('openWindow', (event, { url, closeAfter,nick  }) => { /// open exhibitionist
+  try {
+    const win = new BrowserWindow({
+      width: 800,
+      height: 600,
+      maximizable: false,
+      icon: path.join(__dirname, 'public', 'images', 'pervertido.png'),
+    });
+    win.loadURL(url);
+    win.setMenu(null);
+    win.webContents.on('dom-ready', () => {
+      win.setTitle(`Playcam - ${nick}`);
+  });
+
+    if (closeAfter) {
+      setTimeout(() => {
+        win.close();
+        win.destroy();
+      }, closeAfter * 1000);
+    }
+  } catch (error) {
+    console.error('Error win  open exhibitionist ', error.message);
+  }
+});

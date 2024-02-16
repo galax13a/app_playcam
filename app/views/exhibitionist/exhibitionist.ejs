@@ -28,7 +28,8 @@
                 <div class="col-6" id="cams-exhibitionist">
                     <ul class="list-group list-group-flush w-100">
                         <li v-for="(exhibitionist, index) in filteredExhibitionists" :key="index"
-                            class="list-group-item exhibitionist-item shadow rounded-3 bg-opacity-25 bg-dark">
+                            class="list-group-item exhibitionist-item shadow rounded-3
+                             bg-opacity-25 bg-dark" >
 
                             <div class="exhibitionist-details">
                                 <img :src="exhibitionist.image_url" class="exhibitionist-img" alt="Exhibitionist Image">
@@ -118,7 +119,7 @@
                             <option value="120">Every 2 minutes</option>
                             <option value="180">Every 3 minutes</option>
                         </select>
-                        <label for="interval-selectedCloseWin">Close Room:</label>
+                        <label for="interval-selectedCloseWin">Close Exhibitionist Cam :</label>
                         <select id="interval-selectedCloseWin" class="form-select mb-4" v-model="selectedCloseWin">
                             <option value="60">Every 60 seconds</option>
                             <option value="120">Every 2 minutes</option>
@@ -127,20 +128,27 @@
                             <option value="300">Every 5 minutes</option>
                             <option value="600">Every 10 minutes</option>
                         </select>
-                        <button :disabled="isLoading" class="btn btn-success w-100 shadow bg-opacity-50"
+                        <button :disabled="isLoading" class="btn btn-success w-100 shadow bg-opacity-50 shadow-lg"
                             @click="startTraffic">Start Traffic 
-                            ({{ filteredExhibitionists.length }})
-                            /
-                            {{finalCounter}}
-                            <i v-if="isLoading" class='bx bx-loader-circle bx-spin'></i> <p  v-if="isLoading">Worker Start ...</p> 
+                            (Exhibitionists)
+                            <div v-if="isLoading">
+                                <i class='bx bx-loader-circle bx-spin fs-4'></i>
+                                   <span> Worker Start ... </span>
+                                   ({{ filteredExhibitionists.length }})
+                                     of 
+                                   {{finalCounter}}
+                            </div>
+                            
                         </button>
                             <ul p-3="" class="mb-4 shadow rounded-3">
-                                <li v-for="(user, index) in visitedUsers" :key="user" class="p-2 text-text">                               
+                                <li v-for="(user, index) in visitedUsers" :key="user" class="p-2 text-text"
+                                style="list-style: none; content: '';">                               
                                     <img :src="getUserImage(user)" class="exhibitionist-img" alt="Exhibitionist Image" style="width: 50px; height: auto;">
-                                    Exhibitionist: {{ user }} 
+                                 <span class="text-capitalize">   Visit: 💜 {{ user }},  </span>
                                     <i class='bx bx-ghost'></i>
                                     PLayCam
                                     (<span>{{ index + 1 }}</span>)
+                                
                                 </li>
                             </ul>                           
                             
