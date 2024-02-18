@@ -25,20 +25,21 @@
             <div class="row">
                 <div class="col-6" id="cams-exhibitionist">
                     <ul class="list-group list-group-flush w-100">
-                        <li v-for="(guest, index) in visitedUsers" :key="index" class="list-group-item exhibitionist-item shadow rounded-3 bg-opacity-25 bg-dark">   
+                        <li v-for="(guest, index) in visitedUsers" :key="index" class="list-group-item exhibitionist-item shadow rounded-3 bg-opacity-25 bg-dark">
                             <div class="exhibitionist-details">
-                                <i class='bx bx-ghost' style="font-size:4rem;"></i>
+                                <i :class="getGuestIconClass(index)" style="font-size: 4rem;"></i>
                                 <div class="exhibitionist-info mx-4 text-start">
-                                    <h4 class="card-title nameTag" >
-                                        <i class='bx bxs-webcam fs-5'></i>      
-                                        <span>{{ 'Bot ' + (index + 1) }}</span>                         
+                                    <h4 class="card-title nameTag">
+                                        <i class="bx bxs-webcam fs-5"></i>      
+                                        <span>{{ (index + 1) }} Guest</span>                         
                                     </h4>
                                     <p class="card-text">Location: Chaturbate</p>
-                                 
                                 </div>
                             </div>
                         </li>
                     </ul>
+                    
+                    
                 </div>
 
                 <div class="col-6">
@@ -46,19 +47,27 @@
 
                         <form >
                             <div class="mb-3">
+                                <label class="form-label">Cam Site / <strong class="text-uppercase"> {{ idcam }}</strong></label>                                
+                                <select class="form-select" v-model="idcam" required>
+                                    <option disabled value="">Please select website</option>
+                                    <option value="chaturbate">Chaturbate.com</option>
+                                    <option value="stripchat">Stripchat.com</option>
+                                    <option value="camsoda">Camsoda.com</option>
+                                    <option value="cam4">Cam4.com</option>
+                                    
+                                </select>
                                 <label class="form-label">Send Guests</label>
-                                (       <span>{{ 'Bots ' + this.num_guests }}</span>   )
+                                (       <span>{{ 'Bots ' + (this.num_guests - 1 ) }}</span>   )
                                 <select class="form-select" v-model="guests" required>
                                     <option disabled value="">Please select one</option>
                                     <option value="3">3 Bots - Free</option>
                                     <option value="5">5 Bots - Free</option>
                                     <option value="10">10 Bots - Free</option>
-                                    <option value="ilimit">Ilimit Bots</option>
-                                    
+                                    <option value="ilimit">10.000 Ilimit Bots - PRO</option>                                    
                                 </select>
                             </div>
                            
-                            <button type="submit" class="btn btn-danger shadow">Create Bots</button>                          
+                            <button type="submit" class="btn btn-danger shadow d-none">Create Bots</button>                          
                         </form>
                     </div>
 
@@ -87,21 +96,23 @@
                         </select>
                         <button :disabled="isLoading" class="btn btn-success w-100 shadow bg-opacity-50 shadow-lg"
                             @click="startTraffic">Start Traffic 
-                            (Guest)
+                            (Guest {{ this.num_traffic_guests }})
                             <div v-if="isLoading">
                                 <i class='bx bx-loader-circle bx-spin fs-4'></i>
                                    <span> Worker Start ... </span>                                
                             </div>
                             
                         </button>
-                            <ul p-3="" class="mb-4 shadow rounded-3">
-                                <li v-for="(user, index) in visitedUsers" :key="user" class="p-2 text-text"
-                                style="list-style: none; content: '';">                               
-                                <i class='bx bx-ghost' style="font-size:1.1rem;"></i>
-                                 <span class="text-capitalize">   Visit: 💜  {{ 'Guest ' + (index + 1) }}
-                                    PLayCam                                                         
-                                </li>
-                            </ul>                           
+                        <ul v-if="isLoading" class="mb-4 shadow rounded-3 p-2">
+                          
+                                <span class="text-capitalize">Visit: 💜                             
+                                PLayCam
+                                ( {{ this.num_traffic_guests }} )
+
+                                <i class='bx bxs-ghost bx-burst fs-6' ></i>
+                                </span>
+                    
+                        </ul>   
                             
                     </div>
                 </div>

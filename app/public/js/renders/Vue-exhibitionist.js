@@ -54,39 +54,53 @@ document.addEventListener('DOMContentLoaded', () => {
             startTraffic() {
                 console.log('StartTraffic');
                 this.visitedUsers = [];
-                let index = 0;
                 this.isLoading = true;
+                let index = 0;
+                const totalExhibitionists = this.filteredExhibitionists.length;
+            
                 const intervalId = setInterval(() => {
-                    if (index < this.filteredExhibitionists.length) {
+                    if (index < totalExhibitionists) {
                         const exhibitionist = this.filteredExhibitionists[index];
                         let progress = 0;
                         exhibitionist.progress = 0;
                         exhibitionist.showProgress = true;
+            
                         const progressInterval = setInterval(() => {
                             if (progress < 100) {
                                 exhibitionist.progress = progress;
                                 progress += 1;
                             } else {
                                 exhibitionist.progress = 100;
-                                this.finalCounter += 1; // Incrementar finalCounter correctamente
                                 clearInterval(progressInterval);
                                 setTimeout(() => {
                                     exhibitionist.showProgress = false;
-                                    //console.log(`Exhibitionist ${exhibitionist.username} finished.`);
                                     window.PlaycamAPI.OpenWinRoom(exhibitionist.username, this.selectedCloseWin);
                                     this.visitedUsers.push(exhibitionist.username);
-
                                 }, 1000);
                             }
                         }, this.selectedInterval * 10);
+            
+                        // Move to the next exhibitionist gradually
+                        let transitionIndex = 0;
+                        const transitionInterval = setInterval(() => {
+                            if (transitionIndex < totalExhibitionists) {
+                                // Set the current exhibitionist to active
+                                this.filteredExhibitionists[transitionIndex].active = index === transitionIndex;
+                                transitionIndex++;
+                            } else {
+                                clearInterval(transitionInterval);
+                            }
+                        }, this.selectedInterval * 100);
+            
                         index++;
                     } else {
                         clearInterval(intervalId);
                         this.isLoading = false;
-                        this.finalCounter = -1;
                     }
                 }, this.selectedInterval * 1000);
-            },               
+            },
+            
+                           
             convertToSeconds(value) {
                 return value * 60;
             },
