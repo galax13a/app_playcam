@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title> PlaycamHub- Guests Chaturbate</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="/modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/modules/boxicons/css/boxicons.min.css">
+    <link rel="stylesheet" href="/css/exhibitionist.css">
+    <script defer src="/js/renders/Vue-guests.js"></script>
+    <script defer src="/modules/htmx.org/dist/htmx.min.js"></script>
+    <link rel="icon" href="/images/logo2.png" type="image/png">
+    <script defer src="/js/lib/vue2.js"></script>
+    <script defer src="/modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+</head>
+
+<body>
+    <div class="container mt-2">
+        <div class="container text-center text-white mb-3">
+            <h1> PlayCam<span class="logis">Hub</span> - Chaturbate Guest Cams</h1>
+        </div>
+        <!-- #app -->
+        <div id="app">
+            <div class="row">
+                <div class="col-6" id="cams-exhibitionist">
+                    <ul class="list-group list-group-flush w-100">
+                        <li v-for="(guest, index) in visitedUsers" :key="index" class="list-group-item exhibitionist-item shadow rounded-3 bg-opacity-25 bg-dark">   
+                            <div class="exhibitionist-details">
+                                <i class='bx bx-ghost' style="font-size:4rem;"></i>
+                                <div class="exhibitionist-info mx-4 text-start">
+                                    <h4 class="card-title nameTag" >
+                                        <i class='bx bxs-webcam fs-5'></i>      
+                                        <span>{{ 'Bot ' + (index + 1) }}</span>                         
+                                    </h4>
+                                    <p class="card-text">Location: Chaturbate</p>
+                                 
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="col-6">
+                    <div class="container p-3 m-2 shadow rounded-3 bg-black bg-opacity-50 text-warning ">
+
+                        <form >
+                            <div class="mb-3">
+                                <label class="form-label">Send Guests</label>
+                                (       <span>{{ 'Bots ' + this.num_guests }}</span>   )
+                                <select class="form-select" v-model="guests" required>
+                                    <option disabled value="">Please select one</option>
+                                    <option value="3">3 Bots - Free</option>
+                                    <option value="5">5 Bots - Free</option>
+                                    <option value="10">10 Bots - Free</option>
+                                    <option value="ilimit">Ilimit Bots</option>
+                                    
+                                </select>
+                            </div>
+                           
+                            <button type="submit" class="btn btn-danger shadow">Create Bots</button>                          
+                        </form>
+                    </div>
+
+                    <div id="trafico" class="container p-3 m-2 shadow rounded-3 bg-black bg-opacity-50 text-warning">
+                        <label for="interval-select">Select Interval:</label>
+                        <select id="interval-select" class="form-select mb-2" v-model="selectedInterval">
+                            <option value="3">Every 3 seconds</option>
+                            <option value="5">Every 5 seconds</option>
+                            <option value="10">Every 10 seconds</option>
+                            <option value="15">Every 15 seconds</option>
+                            <option value="20">Every 20 seconds</option>
+                            <option value="30">Every 30 seconds</option>
+                            <option value="40">Every 40 seconds</option>
+                            <option value="60">Every 60 seconds</option>
+                            <option value="120">Every 2 minutes</option>
+                            <option value="180">Every 3 minutes</option>
+                        </select>
+                        <label for="interval-selectedCloseWin">Close Guests Cam :</label>
+                        <select id="interval-selectedCloseWin" class="form-select mb-4" v-model="selectedCloseWin">                  
+                                <option value="600">Every 10 minutes</option>
+                                <option value="1200">Every 20 minutes</option>
+                                <option value="1800">Every 30 minutes</option>
+                                <option value="2400">Every 40 minutes</option>
+                                <option value="3000">Every 50 minutes</option>
+                                <option value="3600">Every 60 minutes</option>                                          
+                        </select>
+                        <button :disabled="isLoading" class="btn btn-success w-100 shadow bg-opacity-50 shadow-lg"
+                            @click="startTraffic">Start Traffic 
+                            (Guest)
+                            <div v-if="isLoading">
+                                <i class='bx bx-loader-circle bx-spin fs-4'></i>
+                                   <span> Worker Start ... </span>                                
+                            </div>
+                            
+                        </button>
+                            <ul p-3="" class="mb-4 shadow rounded-3">
+                                <li v-for="(user, index) in visitedUsers" :key="user" class="p-2 text-text"
+                                style="list-style: none; content: '';">                               
+                                <i class='bx bx-ghost' style="font-size:1.1rem;"></i>
+                                 <span class="text-capitalize">   Visit: 💜  {{ 'Guest ' + (index + 1) }}
+                                    PLayCam                                                         
+                                </li>
+                            </ul>                           
+                            
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <style>
+        body {
+            background: linear-gradient(89.7deg, rgb(120, 15, 141) 2.8%, rgba(228, 134, 13, 0.678) 97.8%);
+        }
+    </style>
+</body>
+</html>

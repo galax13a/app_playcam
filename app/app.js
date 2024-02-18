@@ -4,7 +4,8 @@ const { app, ipcMain, BrowserWindow, desktopCapturer, dialog } = require('electr
 const express = require('express');
 const path = require('path');
 const routes = require('./routes');
-const { createMainWindow, createWinTraductor, createModeratorCamWindow, createWinFile, createWinExhibitionist } = require('./windows'); // Importa el nuevo módulo
+const { createMainWindow, createWinTraductor, createModeratorCamWindow, createWinFile, createWinExhibitionist,
+createBots } = require('./windows'); // Importa el nuevo módulo
 const cors = require('cors');
 
 let Reload = true;
@@ -204,5 +205,19 @@ ipcMain.on('openWindow', (event, { url, closeAfter,nick  }) => { /// open exhibi
     }
   } catch (error) {
     console.error('Error win  open exhibitionist ', error.message);
+  }
+});
+
+ipcMain.on('open-bots-window', () => { /// open guests
+  try {
+    const App_createWinBots = createBots({
+      url: `http://localhost:${PORT}/app/chaturbate/get-guests`,
+      icon: 'public/images/ghost.png',
+      devtools: devtools,
+      preloader: './views/guests/preload-guest.js',
+      node: false,
+    });
+  } catch (error) {
+    console.error('Error win  open guest ', error.message);
   }
 });

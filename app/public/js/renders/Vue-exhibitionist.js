@@ -1,5 +1,6 @@
 
 document.addEventListener('DOMContentLoaded', () => {
+
     new Vue({
         el: '#app',
         data: {
@@ -100,6 +101,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 const minutes = Math.floor((seconds % 3600) / 60);
                 const remainingSeconds = seconds % 60;
                 return `${hours} Hrs, ${minutes} Min, ${remainingSeconds} seconds`;
+            },
+            OpenCB(){
+                console.log("Se hizo clic en el botón de inicio de sesión.");
+                window.PlaycamAPI.OpenWinCB();
             }
         }
     });

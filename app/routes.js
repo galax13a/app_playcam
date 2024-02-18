@@ -273,7 +273,22 @@ router.get('/app/chaturbate/get-exhibitionist/filter', async (req, res) => {
   }
 });
 
-
-
+router.get('/app/chaturbate/get-guests', async (req, res) => {
+  try {
+    /*
+      limit = 6;
+      let url = `https://chaturbate.com/api/public/affiliates/onlinerooms/?wm=gQ4iQ&client_ip=request_ip&exhibitionist=true&limit=${limit}`;       
+      const response = await fetch(url);
+      const data = await response.json();   
+        
+      res.render('exhibitionist/exhibitionist', { exhibitionists: data.results }); // Renderiza la vista con todos los resultados obtenidos
+      */ 
+     res.render('guests/guests');
+     
+  } catch (error) {
+      console.error('Error:', error);
+      res.status(500).json({ error: 'There was an error processing the request, Server Express PlaycamHub' });
+  }
+});
 
 module.exports = router;

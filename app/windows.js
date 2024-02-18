@@ -5,8 +5,8 @@ const path = require('path');
 const fs = require('fs');
 const { app } = require('electron');
 
-let mainWindow, Win_traductor, Win_moderator, Win_exhibitionist = false;
-let Win_traductorVisible = false, Win_moderatorVisible = false;
+let mainWindow, Win_traductor, Win_moderator, Win_exhibitionist = false, Win_Bot;
+let Win_traductorVisible = false, Win_moderatorVisible = false, Win_BotVisible = false;
 const port = process.env.PORT || 3000;
 
 function createMainWindow(config = {}) {
@@ -197,9 +197,7 @@ async function createWinFile(config) { // load file
 async function createWinExhibitionist(config) { // load file createWinExhibitionist
   let winLoad;
   if (!Win_exhibitionist) {
-
-          const { url, icon, devtools, preloader, node = false } = config;
-       
+          const { url, icon, devtools, preloader, node = false } = config;       
           winLoad = new BrowserWindow({
             width: 1200,
             height: 800,
@@ -230,10 +228,46 @@ async function createWinExhibitionist(config) { // load file createWinExhibition
 
   return winLoad;
 }
+
+async function createBots(config) { // load file createBots
+  let winLoad;
+  if (!Win_BotVisible) {
+          const { url, icon, devtools, preloader, node = false } = config;       
+          winLoad = new BrowserWindow({
+            width: 1200,
+            height: 800,
+            maximizable: true,      
+            webPreferences: {
+              nodeIntegration: node,
+              contextIsolation: true,
+              preload: path.join(__dirname, preloader),
+            },
+            icon: path.join(__dirname, icon),
+          });
+
+          if (devtools) {
+            winLoad.webContents.openDevTools();
+          }
+
+          winLoad.setMenu(null);         
+          await winLoad.maximize();
+          await winLoad.loadURL(url);        
+
+          winLoad.on('closed', () => {
+            winLoad = null;
+            Win_BotVisible = false;
+          });
+        
+          Win_BotVisible = true;
+    }
+
+  return winLoad;
+}
 module.exports = {
   createMainWindow,
   createWinTraductor,
   createModeratorCamWindow,
   createWinFile,
-  createWinExhibitionist
+  createWinExhibitionist,
+  createBots
 };
