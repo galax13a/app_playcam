@@ -20,10 +20,63 @@
     <div class="container mt-2">
         <div class="container text-center text-white mb-3">
             <h1> PlayCam<span class="logis">Hub</span> - Guest Cams</h1>
-            <h6>App  <span class="badge bg-secondary shadow-md">V 1.0</span></h6>
+            <h6>App <span class="badge bg-secondary shadow-md">V 1.0</span></h6>
         </div>
         <!-- #app -->
         <div id="app">
+
+            <!-- Modal -->
+            <div class="modal fade " id="botStats" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content bg-black bg-opacity-75 text-warning">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="staticBackdropLabel">👾 CB * Bots Top 100 Models Stats</h5>
+                            <button type="button" class="btn-close bg-danger" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body ">
+
+                            <ul>
+                                <li v-for="(result, index) in botStatsResults" :key="result.username"
+                                    style="list-style-type: none; display: flex; align-items: center;">
+                                    <div>
+                                        <h3 v-if="index === 0">🥇</h3>
+                                        <h3 v-else-if="index === 1">🥈</h3>
+                                        <h3 v-else-if="index === 2">🥉</h3>
+                                        <h3 class="mx-2" v-else>{{ (index + 1) }} </h3>
+                                    </div>
+                                    <div id="resultModels" class="mb-1">
+                                        <img :src="result.image_url" alt="Avatar" class="rounded-circle mb-1 mx-2"
+                                            width="50" height="50">
+                                        <strong class="text-uppercase">
+                                            {{ result.username }}
+                                        </strong>
+                                        <span class="badge bg-success">
+                                            {{ formatNumber(result.num_users) }}
+                                        </span>
+                                        <span> Views / Guests Aprox. </span>
+                                        <span class="badge bg-danger">
+                                            {{ formatNumber(Math.round(result.num_users * 0.73)) }}
+                                        </span>
+                                        👻
+
+                                    </div>
+                                </li>
+
+                            </ul>
+
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-dark bg-opacity-25"
+                                data-bs-dismiss="modal">Close</button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
             <div class="row">
                 <div class="col-6" id="cams-exhibitionist">
                     <ul class="list-group list-group-flush w-100">
@@ -49,8 +102,8 @@
                     <div class="container p-3 m-2 shadow rounded-3 bg-black bg-opacity-50 text-warning ">
                         <form>
                             <div class="mb-3">
-                                <label class="form-label">Cam Site / <strong class="text-uppercase"> 
-                                    {{ idcam }}</strong></label>
+                                <label class="form-label">Cam Site / <strong class="text-uppercase">
+                                        {{ idcam }}</strong></label>
                                 <select class="form-select" v-model="idcam" required>
                                     <option disabled value="">Please select website</option>
                                     <option value="chaturbate">Chaturbate.com</option>
@@ -62,18 +115,19 @@
                                     <div class="row">
                                         <div class="col-6">
                                             <label for="nickmodel">Nick Model</label>
-                                            <input type="text" id="nickmodel" name="nickmodel"
-                                             v-model="nick"
-                                                class="form-control mb-3 w-100">                                     
-                                        </div>                                    
-                                  
+                                            <input type="text" id="nickmodel" name="nickmodel" v-model="nick"
+                                                class="form-control mb-3 w-100">
+                                        </div>
+
                                         <div class="col-6">
-                                            <label for="nickmodel">Models</label>                                          
-                                            <div class="bg-black bg-opacity-50 p-1 rounded-2 shadow">  
+                                            <label for="nickmodel">Models</label>
+                                            <div class="bg-black bg-opacity-50 p-1 rounded-2 shadow">
                                                 <i class='bx bx-add-to-queue fs-3' data-bs-toggle="offcanvas"
-                                                 href="#offcanvasAddmodels" title="Add Model"></i>
-                                                <i data-bs-toggle="modal" data-bs-target="#botStats" title="Bots Tops Stats " class='bx bx-objects-horizontal-left fs-3'></i>
-                                                <i title="Bots Models" class='bx bxs-objects-vertical-bottom fs-3' ></i>
+                                                    href="#offcanvasAddmodels" title="Add Model"></i>
+                                                <i id="botStatsTop" data-bs-toggle="modal" data-bs-target="#botStats"
+                                                    title="Bots Tops Stats " class='bx bx-objects-horizontal-left fs-3'>
+                                                </i>
+                                                <i title="Bots Models" class='bx bxs-objects-vertical-bottom fs-3'></i>
                                                 <i title="Apps " class='bx bx-cube-alt fs-3' title="Apps "></i>
                                             </div>
                                         </div>
@@ -90,9 +144,10 @@
                                     <option value="10">10 Bots - Free</option>
                                     <option value="ilimit">100 Ilimit Bots - PRO</option>
                                 </select>
-                                <a  v-if="guests === 'ilimit'" href="#" id="link-licencie">Key </a>
-                                <input v-if="guests === 'ilimit'" type="number" class="form-control" v-model="ilimitValue" min="1" placeholder="Enter number of bots" required>
-                                
+                                <a v-if="guests === 'ilimit'" href="#" id="link-licencie">Key </a>
+                                <input v-if="guests === 'ilimit'" type="number" class="form-control"
+                                    v-model="ilimitValue" min="1" placeholder="Enter number of bots" required>
+
                             </div>
 
                             <button type="submit" class="btn btn-danger shadow d-none">Create Bots</button>
@@ -123,7 +178,8 @@
                             <option value="3600">Every 60 minutes</option>
                         </select>
 
-                        <button :disabled="isLoading" class="btn btn-success bg-success w-100 shadow bg-opacity-50 shadow-lg"
+                        <button :disabled="isLoading"
+                            class="btn btn-success bg-success w-100 shadow bg-opacity-50 shadow-lg"
                             @click="startTraffic">Start Traffic
                             (Guest {{ this.num_traffic_guests }})
                             <div v-if="isLoading">
@@ -148,48 +204,33 @@
         </div>
     </div>
 
-    <div class="offcanvas offcanvas-start  bg-dark shadow bg-opacity-50" tabindex="-1" id="offcanvasAddmodels" aria-labelledby="offcanvasExampleLabel">
+    <div class="offcanvas offcanvas-start  bg-dark shadow bg-opacity-50" tabindex="-1" id="offcanvasAddmodels"
+        aria-labelledby="offcanvasExampleLabel">
         <div class="offcanvas-header">
-          <h5 class="offcanvas-title text-warning shadow" id="offcanvasAddmodels_title">Models</h5>
-          <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            <h5 class="offcanvas-title text-warning shadow" id="offcanvasAddmodels_title">Models</h5>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body">
-          <div>
-            <p class="text-white">you can add different cams and search for them and send support viewers to their room again</p>            
-            <div class="container">
-                <label for="">Nick Model</label>
-                <input class="form-control mb-3" v-model="input_model" min="3" placeholder="Enter Name Nick" required>
-                    <button class="btn btn-primary  bg-dark w-100 shadow bg-opacity-50 " 
-                    type="" id="btn-add-model-guest">Add Model</button>
-                    
-              </div> 
-        
-        </div>
+            <div>
+                <p class="text-white">you can add different cams and search for them and send support viewers to their
+                    room again</p>
+                <div class="container">
+                    <label for="">Nick Model</label>
+                    <input class="form-control mb-3" v-model="input_model" min="3" placeholder="Enter Name Nick"
+                        required>
+                    <button class="btn btn-primary  bg-dark w-100 shadow bg-opacity-50 " type=""
+                        id="btn-add-model-guest">Add Model</button>
+
+                </div>
+
+            </div>
 
         </div>
-      </div>
-
-      <!-- Modal -->
-<div class="modal fade " id="botStats" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content bg-black bg-opacity-50 text-warning">
-        <div class="modal-header">
-          <h5 class="modal-title" id="staticBackdropLabel">Bots Top Stats</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body ">
-          list models 
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-dark bg-opacity-25" data-bs-dismiss="modal">Close</button>
-
-        </div>
-      </div>
     </div>
-  </div>
+
+    `
 
     <style>
-     
         body {
             background: linear-gradient(89.7deg, rgb(120, 15, 141) 2.8%, rgba(228, 134, 13, 0.678) 97.8%);
         }

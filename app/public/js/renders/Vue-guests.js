@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const app = new Vue({
         el: '#app',
         data: {
+            limit_top_stat_guest : 100,
             guests: 100,
             isLoading: false,
             selectedInterval: 3,
@@ -14,17 +15,18 @@ document.addEventListener('DOMContentLoaded', () => {
             showGhostIcon: true,
             showBurstIcon: false,
             lastProcessedIndex: 0,
-            nick : 'shine_chanel',
-            ghost : 0,
-            ghost_limit : 200,
-            ghost_confirm : false,
+            nick: 'shine_chanel',
+            ghost: 0,
+            ghost_limit: 200,
+            ghost_confirm: false,
+            botStatsResults: [] // Datos de los bots obtenidos de la API
         },
         methods: {
             handleSubmit() {
                 // Lógica para manejar el envío del formulario
                 console.log('Submit handleSubmit');
             },
-            getGuestIconClass(index) {  
+            getGuestIconClass(index) {
                 return index === this.visitedUsers.length - 1 ? 'bx bxs-ghost bx-fade-right text-warning' : 'bx bxs-ghost';
             },
             handleGuestsChange() {
@@ -54,7 +56,33 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
                     }, this.selectedInterval * 1000);
                 }
+            },
+            formatNumber(number) {
+                return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            },
+            fetchBotStats() {
+                console.log('fetchBotStats');
+                fetch(`https://chaturbate.com/api/public/affiliates/onlinerooms/?wm=gQ4iQ&client_ip=request_ip&limit=${this.limit_top_stat_guest}`)
+                    .then(response => response.json())
+                    .then(data => {
+                       this.botStatsResults = [];
+                        this.botStatsResults = data.results;
+                        /*
+                            data.results.forEach(result => {
+                                this.botStatsResults.push(result);
+                                console.log('Username:', result.username);
+                            // console.log('Number of users:', result.num_users);
+                            });
+                            */
+                        // Forzar una actualización del DOM
+                        // this.$forceUpdate();
+                    })
+                    .catch(error => {
+                        console.error('Error fetching bot stats:', error);
+                    });
             }
+
+
         },
         watch: {
             guests(newVal) {
@@ -63,7 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     this.visitedUsers = [];
                     this.num_guests = 1;
                     for (let i = 0; i < parseInt(newVal); i++) {
-                        this.visitedUsers.push(`Bot ${this.num_guests}`);                 
+                        this.visitedUsers.push(`Bot ${this.num_guests}`);
                         // this.num_guests++;
                     }
                 }
@@ -71,6 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         mounted() {
             // Cargar automáticamente los primeros tres invitados al inicio
+            this.fetchBotStats();
             for (let i = 0; i < this.guests; i++) {
                 this.visitedUsers.push(`Bot ${this.num_guests}`);
                 this.num_guests++;
@@ -82,4 +111,13 @@ document.addEventListener('DOMContentLoaded', () => {
     button.addEventListener('click', () => {
         app.startTraffic();
     });
+
+
+    const botStatsTopButton = document.getElementById('botStatsTop');
+
+    botStatsTopButton.addEventListener('click', () => {
+         app.fetchBotStats(); // 
+    });
+
+
 });
