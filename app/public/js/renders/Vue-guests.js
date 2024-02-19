@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ghost: 0,
             ghost_limit: 200,
             ghost_confirm: false,
+            stripchatModels: [],
             botStatsResults: [] // Datos de los bots obtenidos de la API
         },
         methods: {
@@ -80,11 +81,28 @@ document.addEventListener('DOMContentLoaded', () => {
                     .catch(error => {
                         console.error('Error fetching bot stats:', error);
                     });
-            }
+            },
+            getBotStripchat() {
+                fetch('https://go.rmhfrtnd.com/api/models')
+                    .then(response => response.json())
+                    .then(data => {
+                        this.stripchatModels = data.models;
+                    })
+                    .catch(error => {
+                        console.error('Error fetching Stripchat models:', error);
+                    });
+            },
 
 
         },
         watch: {
+            idcam(newVal) {
+                if (newVal === 'chaturbate') {
+                    this.fetchBotStats();
+                } else if (newVal === 'stripchat') {
+                    this.getBotStripchat();
+                }
+            },
             guests(newVal) {
                 if (newVal === '3' || newVal === '5' || newVal === '10') {
                     // Lógica para manejar la selección de 3, 5 o 10 invitados
@@ -99,7 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         mounted() {
             // Cargar automáticamente los primeros tres invitados al inicio
-            this.fetchBotStats();
+            //this.fetchBotStats();
             for (let i = 0; i < this.guests; i++) {
                 this.visitedUsers.push(`Bot ${this.num_guests}`);
                 this.num_guests++;
@@ -112,9 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
         app.startTraffic();
     });
 
-
     const botStatsTopButton = document.getElementById('botStatsTop');
-
     botStatsTopButton.addEventListener('click', () => {
          app.fetchBotStats(); // 
     });

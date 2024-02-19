@@ -32,38 +32,60 @@
                     <div class="modal-content bg-black bg-opacity-75 text-warning">
                         <div class="modal-header">
                             <h5 class="modal-title" id="staticBackdropLabel">👾 CB * Bots Top 100 Models Stats</h5>
-                            <button type="button" class="btn-close bg-danger" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <button type="button" class="btn-close bg-danger" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
                         </div>
                         <div class="modal-body ">
+                            <div class="websites">
+                                <select id="idcamApi" class="form-select mb-3" v-model="idcam" required>
+                                    <option disabled value="">Please select website</option>
+                                    <option value="chaturbate">Chaturbate.com</option>
+                                    <option value="stripchat">Stripchat.com</option>
+                                    <option value="camsoda">Camsoda.com</option>
+                                    <option value="cam4">Cam4.com</option>
+                                </select>
+                                <hr>
+                            </div>
 
-                            <ul>
-                                <li v-for="(result, index) in botStatsResults" :key="result.username"
-                                    style="list-style-type: none; display: flex; align-items: center;">
-                                    <div>
-                                        <h3 v-if="index === 0">🥇</h3>
-                                        <h3 v-else-if="index === 1">🥈</h3>
-                                        <h3 v-else-if="index === 2">🥉</h3>
-                                        <h3 class="mx-2" v-else>{{ (index + 1) }} </h3>
-                                    </div>
-                                    <div id="resultModels" class="mb-1">
-                                        <img :src="result.image_url" alt="Avatar" class="rounded-circle mb-1 mx-2"
-                                            width="50" height="50">
-                                        <strong class="text-uppercase">
-                                            {{ result.username }}
-                                        </strong>
-                                        <span class="badge bg-success">
-                                            {{ formatNumber(result.num_users) }}
-                                        </span>
-                                        <span> Views / Guests Aprox. </span>
-                                        <span class="badge bg-danger">
-                                            {{ formatNumber(Math.round(result.num_users * 0.73)) }}
-                                        </span>
-                                        👻
+                            <div v-if="idcam === 'stripchat'"  id="stripchatRender" class="stripchatRender">
+                                <div v-for="model in stripchatModels" :key="model.id">
+                                    <img :src="model.avatarUrl" alt="Avatar" style="border-radius: 50%; width: 50px; height: 50px;">
+                                    <strong>{{ model.username }}</strong>
+                                    <span>Viewers Count: {{ model.viewersCount }}</span>
+                                </div>
 
-                                    </div>
-                                </li>
+                            </div>
 
-                            </ul>
+                            <div v-if="idcam === 'chaturbate'" id="listarModels" class="listarModels">
+                              
+                                <ul>
+                                    <li v-for="(result, index) in botStatsResults" :key="result.username"
+                                        style="list-style-type: none; display: flex; align-items: center;">
+                                        <div>
+                                            <h3 v-if="index === 0">🥇</h3>
+                                            <h3 v-else-if="index === 1">🥈</h3>
+                                            <h3 v-else-if="index === 2">🥉</h3>
+                                            <h3 class="mx-2" v-else>{{ (index + 1) }} </h3>
+                                        </div>
+                                        <div id="resultModels" class="mb-1">
+                                            <img :src="result.image_url" alt="Avatar" class="rounded-circle mb-1 mx-2"
+                                                width="50" height="50">
+                                            <strong class="text-uppercase">
+                                                {{ result.username }}
+                                            </strong>
+                                            <span class="badge bg-success">
+                                                {{ formatNumber(result.num_users) }}
+                                            </span>
+                                            <span> Views / Guests Aprox. </span>
+                                            <span class="badge bg-danger">
+                                                {{ formatNumber(Math.round(result.num_users * 0.73)) }}
+                                            </span>
+                                            👻
+
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
 
 
                         </div>
