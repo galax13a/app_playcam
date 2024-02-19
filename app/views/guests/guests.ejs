@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title> PlaycamHub- Guests Chaturbate</title>
@@ -18,56 +19,83 @@
 <body>
     <div class="container mt-2">
         <div class="container text-center text-white mb-3">
-            <h1> PlayCam<span class="logis">Hub</span> - Chaturbate Guest Cams</h1>
+            <h1> PlayCam<span class="logis">Hub</span> - Guest Cams</h1>
+            <h6>App  <span class="badge bg-secondary shadow-md">V 1.0</span></h6>
         </div>
         <!-- #app -->
         <div id="app">
             <div class="row">
                 <div class="col-6" id="cams-exhibitionist">
                     <ul class="list-group list-group-flush w-100">
-                        <li v-for="(guest, index) in visitedUsers" :key="index" class="list-group-item exhibitionist-item shadow rounded-3 bg-opacity-25 bg-dark">
+                        <li v-for="(guest, index) in visitedUsers" :key="index"
+                            class="list-group-item exhibitionist-item shadow rounded-3 bg-opacity-25 bg-dark">
                             <div class="exhibitionist-details">
                                 <i :class="getGuestIconClass(index)" style="font-size: 4rem;"></i>
                                 <div class="exhibitionist-info mx-4 text-start">
                                     <h4 class="card-title nameTag">
-                                        <i class="bx bxs-webcam fs-5"></i>      
-                                        <span>{{ (index + 1) }} Guest</span>                         
+                                        <i class="bx bxs-webcam fs-5"></i>
+                                        <span>{{ (index + 1) }} Guest</span>
                                     </h4>
                                     <p class="card-text">Location: Chaturbate</p>
                                 </div>
                             </div>
                         </li>
                     </ul>
-                    
-                    
+
+
                 </div>
 
                 <div class="col-6">
                     <div class="container p-3 m-2 shadow rounded-3 bg-black bg-opacity-50 text-warning ">
-
-                        <form >
+                        <form>
                             <div class="mb-3">
-                                <label class="form-label">Cam Site / <strong class="text-uppercase"> {{ idcam }}</strong></label>                                
+                                <label class="form-label">Cam Site / <strong class="text-uppercase"> 
+                                    {{ idcam }}</strong></label>
                                 <select class="form-select" v-model="idcam" required>
                                     <option disabled value="">Please select website</option>
                                     <option value="chaturbate">Chaturbate.com</option>
                                     <option value="stripchat">Stripchat.com</option>
                                     <option value="camsoda">Camsoda.com</option>
                                     <option value="cam4">Cam4.com</option>
-                                    
                                 </select>
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <label for="nickmodel">Nick Model</label>
+                                            <input type="text" id="nickmodel" name="nickmodel"
+                                             v-model="nick"
+                                                class="form-control mb-3 w-100">                                     
+                                        </div>                                    
+                                  
+                                        <div class="col-6">
+                                            <label for="nickmodel">Models</label>                                          
+                                            <div class="bg-black bg-opacity-50 p-1 rounded-2 shadow">  
+                                                <i class='bx bx-add-to-queue fs-3' data-bs-toggle="offcanvas"
+                                                 href="#offcanvasAddmodels" title="Add Model"></i>
+                                                <i data-bs-toggle="modal" data-bs-target="#botStats" title="Bots Tops Stats " class='bx bx-objects-horizontal-left fs-3'></i>
+                                                <i title="Bots Models" class='bx bxs-objects-vertical-bottom fs-3' ></i>
+                                                <i title="Apps " class='bx bx-cube-alt fs-3' title="Apps "></i>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                    </div>
+                                </div>
+
                                 <label class="form-label">Send Guests</label>
-                                (       <span>{{ 'Bots ' + (this.num_guests - 1 ) }}</span>   )
-                                <select class="form-select" v-model="guests" required>
+                                ( <span>{{ 'Bots ' + (this.num_guests - 1 ) }}</span> )
+                                <select class="form-select mb-2" v-model="guests" required @change="handleGuestsChange">
                                     <option disabled value="">Please select one</option>
                                     <option value="3">3 Bots - Free</option>
                                     <option value="5">5 Bots - Free</option>
                                     <option value="10">10 Bots - Free</option>
-                                    <option value="ilimit">10.000 Ilimit Bots - PRO</option>                                    
+                                    <option value="ilimit">100 Ilimit Bots - PRO</option>
                                 </select>
+                                <a  v-if="guests === 'ilimit'" href="#" id="link-licencie">Key </a>
+                                <input v-if="guests === 'ilimit'" type="number" class="form-control" v-model="ilimitValue" min="1" placeholder="Enter number of bots" required>
+                                
                             </div>
-                           
-                            <button type="submit" class="btn btn-danger shadow d-none">Create Bots</button>                          
+
+                            <button type="submit" class="btn btn-danger shadow d-none">Create Bots</button>
                         </form>
                     </div>
 
@@ -86,43 +114,86 @@
                             <option value="180">Every 3 minutes</option>
                         </select>
                         <label for="interval-selectedCloseWin">Close Guests Cam :</label>
-                        <select id="interval-selectedCloseWin" class="form-select mb-4" v-model="selectedCloseWin">                  
-                                <option value="600">Every 10 minutes</option>
-                                <option value="1200">Every 20 minutes</option>
-                                <option value="1800">Every 30 minutes</option>
-                                <option value="2400">Every 40 minutes</option>
-                                <option value="3000">Every 50 minutes</option>
-                                <option value="3600">Every 60 minutes</option>                                          
+                        <select id="interval-selectedCloseWin" class="form-select mb-3" v-model="selectedCloseWin">
+                            <option value="600">Every 10 minutes</option>
+                            <option value="1200">Every 20 minutes</option>
+                            <option value="1800">Every 30 minutes</option>
+                            <option value="2400">Every 40 minutes</option>
+                            <option value="3000">Every 50 minutes</option>
+                            <option value="3600">Every 60 minutes</option>
                         </select>
-                        <button :disabled="isLoading" class="btn btn-success w-100 shadow bg-opacity-50 shadow-lg"
-                            @click="startTraffic">Start Traffic 
+
+                        <button :disabled="isLoading" class="btn btn-success bg-success w-100 shadow bg-opacity-50 shadow-lg"
+                            @click="startTraffic">Start Traffic
                             (Guest {{ this.num_traffic_guests }})
                             <div v-if="isLoading">
                                 <i class='bx bx-loader-circle bx-spin fs-4'></i>
-                                   <span> Worker Start ... </span>                                
+                                <span> Worker Start ... </span>
                             </div>
-                            
-                        </button>
-                        <ul v-if="isLoading" class="mb-4 shadow rounded-3 p-2">
-                          
-                                <span class="text-capitalize">Visit: 💜                             
-                                PLayCam
-                                ( {{ this.num_traffic_guests }} )
 
-                                <i class='bx bxs-ghost bx-burst fs-6' ></i>
+                        </button>
+                        <div class="container text-center">
+                            <ul v-if="isLoading" class="mb-4 shadow rounded-3 p-2">
+                                <span class="text-capitalize">Visit: 💜
+                                    PLayCam
+                                    ( {{ this.num_traffic_guests }} )
+                                    <i class='bx bxs-ghost bx-burst fs-6'></i>
                                 </span>
-                    
-                        </ul>   
-                            
+                            </ul>
+                        </div>
+
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <div class="offcanvas offcanvas-start  bg-dark shadow bg-opacity-50" tabindex="-1" id="offcanvasAddmodels" aria-labelledby="offcanvasExampleLabel">
+        <div class="offcanvas-header">
+          <h5 class="offcanvas-title text-warning shadow" id="offcanvasAddmodels_title">Models</h5>
+          <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+          <div>
+            <p class="text-white">you can add different cams and search for them and send support viewers to their room again</p>            
+            <div class="container">
+                <label for="">Nick Model</label>
+                <input class="form-control mb-3" v-model="input_model" min="3" placeholder="Enter Name Nick" required>
+                    <button class="btn btn-primary  bg-dark w-100 shadow bg-opacity-50 " 
+                    type="" id="btn-add-model-guest">Add Model</button>
+                    
+              </div> 
+        
+        </div>
+
+        </div>
+      </div>
+
+      <!-- Modal -->
+<div class="modal fade " id="botStats" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content bg-black bg-opacity-50 text-warning">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Bots Top Stats</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body ">
+          list models 
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-dark bg-opacity-25" data-bs-dismiss="modal">Close</button>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
     <style>
+     
         body {
             background: linear-gradient(89.7deg, rgb(120, 15, 141) 2.8%, rgba(228, 134, 13, 0.678) 97.8%);
         }
     </style>
 </body>
+
 </html>

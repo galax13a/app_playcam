@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const app = new Vue({
         el: '#app',
         data: {
-            guests: 3,
+            guests: 100,
             isLoading: false,
             selectedInterval: 3,
             selectedCloseWin: 600,
@@ -14,19 +14,27 @@ document.addEventListener('DOMContentLoaded', () => {
             showGhostIcon: true,
             showBurstIcon: false,
             lastProcessedIndex: 0,
+            nick : 'shine_chanel',
+            ghost : 0,
+            ghost_limit : 200,
+            ghost_confirm : false,
         },
         methods: {
             handleSubmit() {
                 // Lógica para manejar el envío del formulario
                 console.log('Submit handleSubmit');
             },
-            getGuestIconClass(index) {
-                // Si el índice es igual al último invitado, devolvemos la clase 'bx bxs-ghost bx-fade-right'
-                // De lo contrario, devolvemos la clase 'bx bxs-ghost'
-                return index === this.visitedUsers.length - 1 ? 'bx bxs-ghost bx-fade-right' : 'bx bxs-ghost';
-            }
-            
-            ,
+            getGuestIconClass(index) {  
+                return index === this.visitedUsers.length - 1 ? 'bx bxs-ghost bx-fade-right text-warning' : 'bx bxs-ghost';
+            },
+            handleGuestsChange() {
+                // Si se selecciona la opción de bots ilimitados, establecer el valor de ilimitValue en 10000
+                if (this.guests === 'ilimit') {
+                    this.ilimitValue = 100;
+                } else {
+                    this.ilimitValue = 0;
+                }
+            },
 
             startTraffic() {
                 this.visitedUsers = [];
@@ -39,6 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             this.num_guests++;
                             count++;
                             this.num_traffic_guests++;
+                            console.log(`Visited Nick ${this.nick} -  ${this.visitedUsers.length}`);
                         } else {
                             clearInterval(timer);
                             this.isLoading = false;
@@ -54,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     this.visitedUsers = [];
                     this.num_guests = 1;
                     for (let i = 0; i < parseInt(newVal); i++) {
-                        this.visitedUsers.push(`Bot ${this.num_guests}`);
+                        this.visitedUsers.push(`Bot ${this.num_guests}`);                 
                         // this.num_guests++;
                     }
                 }
