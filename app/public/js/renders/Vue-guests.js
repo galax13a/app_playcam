@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
         el: '#app',
         data: {
             limit_top_stat_guest : 100,
-            guests: 100,
+            guests: 3,
             isLoading: false,
             selectedInterval: 3,
             selectedCloseWin: 600,
@@ -61,13 +61,14 @@ document.addEventListener('DOMContentLoaded', () => {
             formatNumber(number) {
                 return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
             },
-            fetchBotStats() {
-                console.log('fetchBotStats');
+            fetchBotStatsChatur() {
+                console.log('fetchBotStatsChatur');
                 fetch(`https://chaturbate.com/api/public/affiliates/onlinerooms/?wm=gQ4iQ&client_ip=request_ip&limit=${this.limit_top_stat_guest}`)
                     .then(response => response.json())
                     .then(data => {
                        this.botStatsResults = [];
                         this.botStatsResults = data.results;
+                        this.botStatsResults.sort((a, b) => b.num_users - a.num_users);
                         /*
                             data.results.forEach(result => {
                                 this.botStatsResults.push(result);
@@ -75,7 +76,6 @@ document.addEventListener('DOMContentLoaded', () => {
                             // console.log('Number of users:', result.num_users);
                             });
                             */
-                        // Forzar una actualización del DOM
                         // this.$forceUpdate();
                     })
                     .catch(error => {
@@ -83,10 +83,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     });
             },
             getBotStripchat() {
-                fetch('https://go.rmhfrtnd.com/api/models')
+                fetch(`https://go.rmhfrtnd.com/api/models?limit=${this.limit_top_stat_guest}`)
                     .then(response => response.json())
                     .then(data => {
                         this.stripchatModels = data.models;
+                        this.stripchatModels.sort((a, b) => b.viewersCount - a.viewersCount);
                     })
                     .catch(error => {
                         console.error('Error fetching Stripchat models:', error);
@@ -98,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
         watch: {
             idcam(newVal) {
                 if (newVal === 'chaturbate') {
-                    this.fetchBotStats();
+                    this.fetchBotStatsChatur();
                 } else if (newVal === 'stripchat') {
                     this.getBotStripchat();
                 }
@@ -132,7 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const botStatsTopButton = document.getElementById('botStatsTop');
     botStatsTopButton.addEventListener('click', () => {
-         app.fetchBotStats(); // 
+         app.fetchBotStatsChatur(); // 
     });
 
 

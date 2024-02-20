@@ -15,6 +15,39 @@
     <script defer src="/modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
 </head>
+<style>
+    .cursor-hand {
+        cursor: pointer;
+      }
+      .modal-body {
+        position: relative;
+      }
+      .hover-background-yellow {
+        border-radius: 12px;
+        transition: background-color 0.5s; /* Agregar una transición suave */
+      }
+      .hover-background-yellow:hover {
+        background-color: rgba(133, 15, 98, 0.418); /* Amarillo con transparencia al 50% */
+        border-radius: 12px;
+      }
+      
+      .modal-body::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%; /* Ajusta el ancho al 100% */
+        height: 100%; /* Ajusta la altura al 100% */
+        background-image: url('/images/top100models.png');
+        background-size: contain; /* Ajusta el tamaño de la imagen para que quepa dentro del div */
+        background-repeat: no-repeat; /* Evita la repetición de la imagen */
+        background-position: left top; /* Alinea la imagen a la izquierda y arriba */
+        opacity: 0.7; /* Establece la opacidad al 50% */
+        z-index: -1; /* Asegura que la imagen de fondo esté detrás de los elementos del modal */
+      }
+      
+      
+</style>
 
 <body>
     <div class="container mt-2">
@@ -28,14 +61,18 @@
             <!-- Modal -->
             <div class="modal fade " id="botStats" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
                 aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                <div class="modal-dialog modal-lg">
+                <div class="modal-dialog modal-xl">
                     <div class="modal-content bg-black bg-opacity-75 text-warning">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="staticBackdropLabel">👾 CB * Bots Top 100 Models Stats</h5>
+                            <h5 class="modal-title text-uppercase" id="staticBackdropLabel">
+                             <img src="/images/logo2.png" width="60" alt="">
+                                Top 100 Models {{idcam}} Stats 👾
+                            </h5>
                             <button type="button" class="btn-close bg-danger" data-bs-dismiss="modal"
                                 aria-label="Close"></button>
                         </div>
                         <div class="modal-body ">
+                            
                             <div class="websites">
                                 <select id="idcamApi" class="form-select mb-3" v-model="idcam" required>
                                     <option disabled value="">Please select website</option>
@@ -46,45 +83,61 @@
                                 </select>
                                 <hr>
                             </div>
-
-                            <div v-if="idcam === 'stripchat'"  id="stripchatRender" class="stripchatRender">
-                                <div v-for="model in stripchatModels" :key="model.id">
-                                    <img :src="model.avatarUrl" alt="Avatar" style="border-radius: 50%; width: 50px; height: 50px;">
-                                    <strong>{{ model.username }}</strong>
-                                    <span>Viewers Count: {{ model.viewersCount }}</span>
+                            
+                            <div v-if="idcam === 'stripchat'" id="stripchatRender" class="list-group bg-opacity-25 bg-dark border-0 ">
+                                <div class="mb-2 mx-2  border-0 hover-background-yellow" v-for="(model, index) in stripchatModels" :key="model.id">
+                                    <div class="container d-flex justify-content-between align-items-center rounded-3 ">
+                                        <h3 v-if="index === 0">🥇</h3>
+                                        <h3 v-else-if="index === 1">🥈</h3>
+                                        <h3 v-else-if="index === 2">🥉</h3>
+                                        <h3 class="mx-2" v-else>{{ (index + 1) }}</h3>
+                            
+                                        <img :src="model.avatarUrl" alt="Avatar" style="border-radius: 50%; width: 50px; height: 50px;">
+                                        <strong class="text-uppercase">{{ model.username }}</strong>
+                                        <span> Views / {{ formatNumber(model.viewersCount) }}</span>
+                                        <span class="badge bg-warning text-dark shadow cursor-pointer" title="Users Tokens">
+                                            <i class='bx bx-user-circle'></i> Users:Tokens {{ formatNumber(Math.round(model.viewersCount  * 0.12)) }}
+                                        </span>
+                                        /
+                                        <span class="badge bg-dark cursor-pointer" title="Users Greys">
+                                            <i class='bx bx-user'></i> Greys>{{ formatNumber(Math.round(model.viewersCount  * 0.15)) }}
+                                        </span>
+                                        /
+                                        <span class="badge bg-danger cursor-pointer" title="Views Guests / Bosts">
+                                            👻 Guests>{{ formatNumber(Math.round(model.viewersCount  * 0.73)) }} 
+                                        </span>
+                                    </div>
                                 </div>
-
                             </div>
+                            
 
                             <div v-if="idcam === 'chaturbate'" id="listarModels" class="listarModels">
-                              
-                                <ul>
-                                    <li v-for="(result, index) in botStatsResults" :key="result.username"
-                                        style="list-style-type: none; display: flex; align-items: center;">
-                                        <div>
-                                            <h3 v-if="index === 0">🥇</h3>
-                                            <h3 v-else-if="index === 1">🥈</h3>
-                                            <h3 v-else-if="index === 2">🥉</h3>
-                                            <h3 class="mx-2" v-else>{{ (index + 1) }} </h3>
-                                        </div>
-                                        <div id="resultModels" class="mb-1">
-                                            <img :src="result.image_url" alt="Avatar" class="rounded-circle mb-1 mx-2"
-                                                width="50" height="50">
-                                            <strong class="text-uppercase">
-                                                {{ result.username }}
-                                            </strong>
-                                            <span class="badge bg-success">
-                                                {{ formatNumber(result.num_users) }}
-                                            </span>
-                                            <span> Views / Guests Aprox. </span>
-                                            <span class="badge bg-danger">
-                                                {{ formatNumber(Math.round(result.num_users * 0.73)) }}
-                                            </span>
-                                            👻
 
-                                        </div>
-                                    </li>
-                                </ul>
+                                <div class="border-0 mb-2 hover-background-yellow"   v-for="(model, index) in botStatsResults" :key="model.username">
+                                    <div class=" mb-2 mx-2 container d-flex justify-content-between align-items-center rounded-3 ">
+                                        <h3 v-if="index === 0">🥇</h3>
+                                        <h3 v-else-if="index === 1">🥈</h3>
+                                        <h3 v-else-if="index === 2">🥉</h3>
+                                        <h3 class="mx-2" v-else>{{ (index + 1) }}</h3>
+                            
+                                        <img :src="model.image_url" alt="Avatar" style="border-radius: 50%; width: 50px; height: 50px;">
+                                        <strong class="text-uppercase">{{ model.username }}</strong>
+                                        <span> Views / {{ formatNumber(model.num_users) }}</span>
+                                        <span class="badge bg-warning text-dark shadow cursor-pointer" title="Users Tokens">
+                                            <i class='bx bx-user-circle'></i> Users:Tokens {{ formatNumber(Math.round(model.num_users  * 0.12)) }}
+                                        </span>
+                                        /
+                                        <span class="badge bg-dark cursor-pointer" title="Users Greys">
+                                            <i class='bx bx-user'></i> Greys>{{ formatNumber(Math.round(model.num_users  * 0.15)) }}
+                                        </span>
+                                        /
+                                        <span class="badge bg-danger cursor-pointer" title="Views Guests / Bosts">
+                                            👻 Guests>{{ formatNumber(Math.round(model.num_users  * 0.73)) }} 
+                                        </span>
+                                    </div>
+                                </div>
+                              
+                           
                             </div>
 
 
@@ -100,11 +153,11 @@
 
 
             <div class="row">
-                <div class="col-6" id="cams-exhibitionist">
+                <div class="col-6" id="cams-bots">
                     <ul class="list-group list-group-flush w-100">
                         <li v-for="(guest, index) in visitedUsers" :key="index"
                             class="list-group-item exhibitionist-item shadow rounded-3 bg-opacity-25 bg-dark">
-                            <div class="exhibitionist-details">
+                            <div class="bots-details d-flex">
                                 <i :class="getGuestIconClass(index)" style="font-size: 4rem;"></i>
                                 <div class="exhibitionist-info mx-4 text-start">
                                     <h4 class="card-title nameTag">
@@ -230,7 +283,7 @@
         aria-labelledby="offcanvasExampleLabel">
         <div class="offcanvas-header">
             <h5 class="offcanvas-title text-warning shadow" id="offcanvasAddmodels_title">Models</h5>
-            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            <button type="button" class="btn-close text-reset bg-danger" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body">
             <div>
@@ -249,8 +302,6 @@
 
         </div>
     </div>
-
-    `
 
     <style>
         body {
