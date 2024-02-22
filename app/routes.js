@@ -291,4 +291,27 @@ router.get('/app/chaturbate/get-guests', async (req, res) => {
   }
 });
 
+router.get('/app/players/stripchat', async (req, res) => {
+  try {
+    const url_player = req.query.url_player;
+    res.render('players/stripchat/player-stripchat', { url_player });
+
+  } catch (error) {
+    console.error('Error al manejar la solicitud del reproductor player: ', error.message);
+    res.status(500).json({ error: 'Hubo un error al procesar la solicitud' });
+  }
+});
+
+router.get('/app/players/chaturbate', async (req, res) => {
+  try {
+    const url_player = req.query.url_player;
+    res.render('players/chaturbate/player-chaturbate', { url_player });
+
+  } catch (error) {
+    console.error('Error al manejar la solicitud del reproductor player: ', error.message);
+    res.status(500).json({ error: 'Hubo un error al procesar la solicitud' });
+  }
+});
+
+
 module.exports = router;

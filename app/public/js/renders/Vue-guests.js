@@ -93,7 +93,13 @@ document.addEventListener('DOMContentLoaded', () => {
                         console.error('Error fetching Stripchat models:', error);
                     });
             },
-
+            openPlayer(url, mobil) {          
+                window.PlaycamAPI.OpenPlayerStripchat(url, mobil);
+              },
+        
+            openPlayerChaturbate(nick){
+                window.PlaycamAPI.openPlayerChaturbate(nick);
+            },
 
         },
         watch: {

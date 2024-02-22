@@ -5,7 +5,7 @@ const express = require('express');
 const path = require('path');
 const routes = require('./routes');
 const { createMainWindow, createWinTraductor, createModeratorCamWindow, createWinFile, createWinExhibitionist,
-createBots } = require('./windows'); // Importa el nuevo módulo
+createBots,createPlayerStripchat } = require('./windows'); // Importa el nuevo módulo
 const cors = require('cors');
 
 let Reload = true;
@@ -208,7 +208,7 @@ ipcMain.on('openWindow', (event, { url, closeAfter,nick  }) => { /// open exhibi
   }
 });
 
-ipcMain.on('open-bots-window', () => { /// open guests
+ipcMain.on('open-guests-window', () => { /// open guests
   try {
     const App_createWinBots = createBots({
       url: `http://localhost:${PORT}/app/chaturbate/get-guests`,
@@ -219,5 +219,44 @@ ipcMain.on('open-bots-window', () => { /// open guests
     });
   } catch (error) {
     console.error('Error win  open guest ', error.message);
+  }
+});
+
+
+ipcMain.on('open-player-stripchat', (event, url_player,mobil) => {
+  try {
+    let width, height;
+    //if(mobil){ width = 480, height = 720} else { width = 640, height = 460}
+    if(mobil){ width = 496, height = 690} else { width = 640, height = 400}
+    const App_createWinPlayerStripchat = createPlayerStripchat({
+      player: url_player,
+      url: `http://localhost:${PORT}/app/players/stripchat?url_player=${encodeURIComponent(url_player)}`,
+      icon: 'public/images/player.png',
+      devtools: devtools,
+      preloader: './views/players/stripchat/preload-player.js',
+      node: false,
+      width: width,
+      height: height
+    });
+  } catch (error) {
+    console.error('Error al abrir el reproductor de modelo: ', error.message);
+  }
+});
+
+ipcMain.on('open-player-chaturbate', (event, url_player) => {
+  try {
+    let width=830, height=473;
+    const App_createWinPlayerStripchat = createPlayerStripchat({
+      player: url_player,
+      url: `http://localhost:${PORT}/app/players/chaturbate?url_player=${encodeURIComponent(url_player)}`,
+      icon: 'public/images/player-cb.png',
+      devtools: devtools,
+      preloader: './views/players/chaturbate/preload-player.js',
+      node: false,
+      width: width,
+      height: height
+    });
+  } catch (error) {
+    console.error('Error al abrir el reproductor de modelo: ', error.message);
   }
 });

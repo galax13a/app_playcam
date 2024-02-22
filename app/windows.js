@@ -263,11 +263,44 @@ async function createBots(config) { // load file createBots
 
   return winLoad;
 }
+
+async function createPlayerStripchat(config) { // load file createPlayer stripchat
+  let winLoad;
+
+          const { url, icon, devtools, preloader, node = false, width=640, height=666 } = config;       
+       
+          winLoad = new BrowserWindow({
+            width: width,
+            height: height,
+            maximizable: false,      
+            webPreferences: {
+              nodeIntegration: node,
+              contextIsolation: true,
+              preload: path.join(__dirname, preloader),
+            },
+            icon: path.join(__dirname, icon),
+          });
+
+          if (devtools) {
+            winLoad.webContents.openDevTools();
+          }
+
+          winLoad.setMenu(null);     
+          await winLoad.loadURL(url);        
+
+          winLoad.on('closed', () => {
+            winLoad = null;
+          });        
+ 
+  return winLoad;
+}
+
 module.exports = {
   createMainWindow,
   createWinTraductor,
   createModeratorCamWindow,
   createWinFile,
   createWinExhibitionist,
-  createBots
+  createBots,
+  createPlayerStripchat
 };
